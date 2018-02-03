@@ -11,6 +11,9 @@
   overflow: hidden;
   z-index: 1;
 }
+.drop-box_error {
+  border-color: #EF5350;
+}
 .drop-box__overlay {
   position: absolute;
   top: 0;
