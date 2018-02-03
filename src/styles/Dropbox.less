@@ -1,0 +1,42 @@
+@import "variables";
+
+.drop-box {
+  flex: 1;
+  .flexCenterAlignment;
+  margin: 20px 40px;
+  border: 2px dashed @darkGray;
+  border-radius: 15px;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  &__overlay {
+    .fillContainer(0);
+    z-index: 1;
+    overflow: hidden;
+    .flexCenterAlignment;
+    font-size: 40px;
+    text-shadow: 1px 1px #fff;
+    &:before{
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 200%;
+      z-index: -1;
+      background-color: @bgColor;
+      // лоадер на скорую руку
+      background-image: repeating-linear-gradient(45deg, @green200, @green200 35px, @green50 35px, @green50 70px);
+      animation: backgroundMove 20s linear infinite;
+    }
+  }
+}
+
+@keyframes backgroundMove {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}

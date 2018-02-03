@@ -1,0 +1,92 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <option name="myLocal" value="true" />
+    <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="myValues">
+        <value>
+          <list size="26">
+            <item index="0" class="java.lang.String" itemvalue="ng-repeat" />
+            <item index="1" class="java.lang.String" itemvalue="ps-property-grid" />
+            <item index="2" class="java.lang.String" itemvalue="ng-click" />
+            <item index="3" class="java.lang.String" itemvalue="ng-show" />
+            <item index="4" class="java.lang.String" itemvalue="ng-style" />
+            <item index="5" class="java.lang.String" itemvalue="ng-if" />
+            <item index="6" class="java.lang.String" itemvalue="ps-once-bind" />
+            <item index="7" class="java.lang.String" itemvalue="ng-required" />
+            <item index="8" class="java.lang.String" itemvalue="unselectable" />
+            <item index="9" class="java.lang.String" itemvalue="ng-class" />
+            <item index="10" class="java.lang.String" itemvalue="load-form" />
+            <item index="11" class="java.lang.String" itemvalue="in" />
+            <item index="12" class="java.lang.String" itemvalue="ng-controller" />
+            <item index="13" class="java.lang.String" itemvalue="required" />
+            <item index="14" class="java.lang.String" itemvalue="ng-bind-html" />
+            <item index="15" class="java.lang.String" itemvalue="ps-pager" />
+            <item index="16" class="java.lang.String" itemvalue="current-page" />
+            <item index="17" class="java.lang.String" itemvalue="whole-data-length" />
+            <item index="18" class="java.lang.String" itemvalue="rows-on-page" />
+            <item index="19" class="java.lang.String" itemvalue="pages-in-list" />
+            <item index="20" class="java.lang.String" itemvalue="ng-hide" />
+            <item index="21" class="java.lang.String" itemvalue="lazy-load" />
+            <item index="22" class="java.lang.String" itemvalue="ps-attr" />
+            <item index="23" class="java.lang.String" itemvalue="icon" />
+            <item index="24" class="java.lang.String" itemvalue="ng-include" />
+            <item index="25" class="java.lang.String" itemvalue="ng-cloak" />
+          </list>
+        </value>
+      </option>
+      <option name="myCustomValuesEnabled" value="true" />
+    </inspection_tool>
+    <inspection_tool class="HtmlUnknownTag" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="myValues">
+        <value>
+          <list size="42">
+            <item index="0" class="java.lang.String" itemvalue="nobr" />
+            <item index="1" class="java.lang.String" itemvalue="noembed" />
+            <item index="2" class="java.lang.String" itemvalue="comment" />
+            <item index="3" class="java.lang.String" itemvalue="noscript" />
+            <item index="4" class="java.lang.String" itemvalue="embed" />
+            <item index="5" class="java.lang.String" itemvalue="script" />
+            <item index="6" class="java.lang.String" itemvalue="ps-list-drop-single" />
+            <item index="7" class="java.lang.String" itemvalue="ps-text-field" />
+            <item index="8" class="java.lang.String" itemvalue="ps-button" />
+            <item index="9" class="java.lang.String" itemvalue="ps-list-item" />
+            <item index="10" class="java.lang.String" itemvalue="ps-date-time" />
+            <item index="11" class="java.lang.String" itemvalue="ps-icon" />
+            <item index="12" class="java.lang.String" itemvalue="ps-grid-column" />
+            <item index="13" class="java.lang.String" itemvalue="ps-grid" />
+            <item index="14" class="java.lang.String" itemvalue="ps-toolbar" />
+            <item index="15" class="java.lang.String" itemvalue="ps-checkbox" />
+            <item index="16" class="java.lang.String" itemvalue="ng-form" />
+            <item index="17" class="java.lang.String" itemvalue="ps-grid-column-status" />
+            <item index="18" class="java.lang.String" itemvalue="ps-toolbar-separator" />
+            <item index="19" class="java.lang.String" itemvalue="ps-radio-group" />
+            <item index="20" class="java.lang.String" itemvalue="ps-radio-group-item" />
+            <item index="21" class="java.lang.String" itemvalue="ps-list-drop-button" />
+            <item index="22" class="java.lang.String" itemvalue="ps-splitter-zone" />
+            <item index="23" class="java.lang.String" itemvalue="ps-splitter" />
+            <item index="24" class="java.lang.String" itemvalue="ps-grid-column-mult" />
+            <item index="25" class="java.lang.String" itemvalue="ps-pager" />
+            <item index="26" class="java.lang.String" itemvalue="ps-list-drop-multiple" />
+            <item index="27" class="java.lang.String" itemvalue="ps-tabs" />
+            <item index="28" class="java.lang.String" itemvalue="ps-text-dictionary" />
+            <item index="29" class="java.lang.String" itemvalue="ps-list-drop-single-autocomplete" />
+            <item index="30" class="java.lang.String" itemvalue="ps-dialog-buttons" />
+            <item index="31" class="java.lang.String" itemvalue="ps-date-time-interval" />
+            <item index="32" class="java.lang.String" itemvalue="ps-tab" />
+            <item index="33" class="java.lang.String" itemvalue="ps-grid-column-multi" />
+            <item index="34" class="java.lang.String" itemvalue="ps-dialog" />
+            <item index="35" class="java.lang.String" itemvalue="ps-list-split-button" />
+            <item index="36" class="java.lang.String" itemvalue="ps-dialog-info" />
+            <item index="37" class="java.lang.String" itemvalue="ps-list-single" />
+            <item index="38" class="java.lang.String" itemvalue="ps-list-multiple" />
+            <item index="39" class="java.lang.String" itemvalue="ng-include" />
+            <item index="40" class="java.lang.String" itemvalue="ps-dialog-buttons" />
+            <item index="41" class="java.lang.String" itemvalue="ps-grid-column-filter" />
+          </list>
+        </value>
+      </option>
+      <option name="myCustomValuesEnabled" value="true" />
+    </inspection_tool>
+  </profile>
+</component>

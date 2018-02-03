@@ -1,0 +1,29 @@
+@import "variables";
+
+body, html {
+  margin:0;
+  padding: 0;
+}
+
+body {
+  background: @bgColor;
+  font: 400 @baseSize/1.4 @fonts;
+  color: @darkGray;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+.app-root {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.app-body, .app-wrapper {
+  flex:1;
+  display: flex;
+  flex-direction: column;
+}
