@@ -18,8 +18,8 @@ class Dropbox extends React.Component {
   };
 
   handleChange = (event) => {
-    const file = event.target.files[0];
-    this.handleFile(file);
+    this.props.clearErrors();
+    this.handleFile(event.target.files);
   };
 
   handleDragEnter = (e) => {
@@ -36,79 +36,107 @@ class Dropbox extends React.Component {
     const
       dt = e.dataTransfer,
       files = dt.files;
-
-    if(files.length>1){
-      //TODO: подумать над вариантом множественной обработки - как и где выводить её результаты
-      this.props.handleError(`we can handle only one file`);
-    }else{
-      this.handleFile(files[0]);
-    }
+    this.handleFile(files);
   };
 
-  handleFile = (file) => {
+  handleFile = (files) => {
 
-    const
-      MAX_FILE_SIZE = 1048576,
-      extensionError = `the file must be in .txt or .json format.`,
-      sizeError = `the file size must be less than ${(MAX_FILE_SIZE/1024/1024).toFixed(0)}mb`,
-      parseError = `uploaded file "${file.name}" can't be parsed as JSON`,
-      uploadError = `can't upload "${file.name}"`;
+    let result = [];
+    const checkFile = (file) => {
 
-    /*
-      * Вообще я планировал сделать проверку на Mime type и пытаться отпарсить
-      * application/json и text/plain, и был сильно удивлен, что в file.type в JSON
-      * приходит просто пустая строка. Вероятно, это какие-то неведомые мне подводные камни.
-      * Остается проверить расшрение файла, допустить .json и .txt, а потом попробовать их отпарсить
-      * */
+      const
+        MAX_FILE_SIZE = 1048576,
+        extensionError = `${file.name}" don't have .txt or .json format.`,
+        sizeError = `"${file.name}" is grater then ${(MAX_FILE_SIZE / 1024 / 1024).toFixed(0)}mb`,
+        parseError = `uploaded file "${file.name}" can't be parsed as JSON`,
+        uploadError = `can't upload "${file.name}"`;
 
-    const
-      // чтобы получить расширение файла беру имя файла, режу на массив по точке и беру его последний элемент
-      fileNameSpread = file.name.split('.'),
-      fileExtension = fileNameSpread[fileNameSpread.length - 1];
+      const handleError = (text) => {
+        //TODO: проверить надобность initErrors
+        let initErrors;
+        if (!this.props.errors.length) {
+          initErrors = []
+        } else {
+          initErrors = this.props.errors;
+        }
+        const
+          err = {
+            text,
+            key: Date.now()
+          },
+          errors = initErrors.concat([err]);
+        this.props.setError(errors);
+      };
 
-    //проверяем расширение
-    if(fileExtension !== 'json' && fileExtension !== 'txt'){
-      this.props.handleError(extensionError);
-      return;
-    }
+      /*
+        * Вообще я планировал сделать проверку на Mime type и пытаться отпарсить
+        * application/json и text/plain, и был сильно удивлен, что в file.type в JSON
+        * приходит просто пустая строка. Вероятно, это какие-то неведомые мне подводные камни.
+        * Остается проверить расшрение файла, допустить .json и .txt, а потом попробовать их отпарсить
+        * */
 
-    // проверяем на размер файла
-    if(file.size>=MAX_FILE_SIZE){
-      this.props.handleError(sizeError);
-      return;
-    }
+      const
+        // чтобы получить расширение файла беру имя файла, режу на массив по точке и беру его последний элемент
+        fileNameSpread = file.name.split('.'),
+        fileExtension = fileNameSpread[fileNameSpread.length - 1];
 
-    const reader = new FileReader();
-    reader.onloadstart = (event) => {
-      this.setState({uploading: true});
-    };
-    reader.onloadend = (event) => {
-      this.setState({uploading: false});
-      let parseResult = false;
-      // проверяем, парсится ли полученный объект как JSON
-      try {
-        parseResult = JSON.parse(event.target.result);
-      } catch (err){
-        this.props.handleError(parseError);
-      }
-      if(parseResult){
-        this.props.handleError(false);
-
-        const resultObject = {
-          name: file.name,
-          body: parseResult
-        };
-
-        this.props.setResult([resultObject]);
-
+      //проверяем расширение
+      if (fileExtension !== 'json' && fileExtension !== 'txt') {
+        handleError(extensionError);
+        return;
       }
 
-    };
-    reader.onerror = (event) => {
-      this.props.handleError(uploadError);
-    };
+      // проверяем на размер файла
+      if (file.size >= MAX_FILE_SIZE) {
+        handleError(sizeError);
+        return;
+      }
 
-    reader.readAsText(file);
+      const reader = new FileReader();
+      reader.onloadstart = (event) => {
+        this.setState({uploading: true});
+      };
+      reader.onloadend = (event) => {
+        this.setState({uploading: false});
+        let parseResult = false;
+        // проверяем, парсится ли полученный объект как JSON
+        try {
+          parseResult = JSON.parse(event.target.result);
+        } catch (error) {
+          handleError(parseError)
+        }
+        if (parseResult) {
+
+          const resultObject = {
+            name: file.name,
+            body: parseResult
+          };
+
+          result = result.concat([resultObject]);
+          /*
+          * TODO: Warning: Can only update a mounted or mounting component. This usually means you called setState, replaceState, or forceUpdate on an unmounted component. This is a no-op.
+          * Хз, как быть с этой асинхронной магией, но он вроде как работает и ворнинга бы не было, если бы стояло ограничение на 1 файл
+          * Но с несколькими то интереснее. Даже с ворнингом.
+          *
+          * JavaScript разработчик решил использовать асинхронные запросы, чтобы решить свои проблемы
+          * две проблемы
+          * Теперь у него
+          *
+          * */
+
+          this.props.setResult(result);
+        }
+
+      };
+      reader.onerror = (event) => {
+        handleError(uploadError);
+      };
+
+      reader.readAsText(file);
+    };
+    for (let i=0; i<files.length; i++) {
+      checkFile(files[i]);
+    }
 
   };
 
@@ -121,7 +149,7 @@ class Dropbox extends React.Component {
     if(this.state.uploading){
       overlay = <div className="drop-box__overlay">Loading...</div>
     }
-    if(this.props.error){
+    if(this.props.errors.length){
       modifier = 'drop-box_error'
     }
 

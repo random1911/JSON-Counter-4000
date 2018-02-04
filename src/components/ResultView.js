@@ -7,7 +7,7 @@ class ResultView extends React.Component {
   getCountResult = (json) => {
     let
       counter = 0,
-      keys = []
+      keys = [];
     function registerObject(key) {
       counter++;
       keys = keys.concat([key]);
@@ -16,7 +16,6 @@ class ResultView extends React.Component {
     function countObject(target){
       for(let key in target){
         if( typeof target[key] === 'object' && target[key]!== null){
-          console.log(key + ' is object');
           registerObject(key);
           countObject(target[key]);
         }

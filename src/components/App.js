@@ -7,13 +7,20 @@ import ResultView from './ResultView';
 class App extends Component {
 
   state = {
-    error: false,
+    errors: [],
     result: []
   };
 
   // вывести собщения об ошиках
-  handleError = (error) => {
-    this.setState({ error })
+  setError = (errors) => {
+    this.setState({ errors })
+  };
+
+  // очистить сообщения об ошибках
+  clearErrors = () => {
+    this.setState({
+      errors: []
+    })
   };
 
   // передать на подсчет валидные JSON файлы
@@ -24,6 +31,7 @@ class App extends Component {
   // обнуление стейта для кнопки на резльтате
   resetResult = () => {
     this.setState({
+      errors: [],
       result: []
     })
   };
@@ -40,8 +48,13 @@ class App extends Component {
     let
       displayError = null,
       contentToDisplay;
-    if(this.state.error){
-      displayError = <ErrorBar errorText={this.state.error} />
+    if(this.state.errors.length){
+      displayError = (
+        <ErrorBar
+          errors={this.state.errors}
+          clearErrors={this.clearErrors}
+        />
+      )
     }
     if(this.state.result.length){
       contentToDisplay = (
@@ -53,9 +66,10 @@ class App extends Component {
     }else{
       contentToDisplay = (
         <Dropbox
-          handleError={this.handleError}
+          setError={this.setError}
           setResult={this.setResult}
-          error={this.state.error}
+          errors={this.state.errors}
+          clearErrors={this.clearErrors}
         />
       );
     }

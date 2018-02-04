@@ -8,6 +8,7 @@ body {
   background: #f5f5f5;
   font: 400 16px/1.4 'Ubuntu', sans-serif;
   color: #263238;
+  min-width: 800px;
 }
 *,
 *:before,
