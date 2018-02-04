@@ -1,14 +1,14 @@
 .button {
-  cursor: pointer;
   display: inline-flex;
-  align-items: center;
   position: relative;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 10px 20px;
+  height: 40px;
+  align-items: center;
   color: #fff;
   background: #263238;
-  padding: 10px 20px;
   font: 400 16px/20px 'Ubuntu', sans-serif;
-  height: 40px;
-  text-decoration: none;
   border-radius: 2px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
   transition: background-color 0.2s ease, box-shadow 0.2s ease;

@@ -60,3 +60,17 @@
   justify-content: center;
   align-items: center;
 }
+
+.buttonStyle() {
+  cursor: pointer;
+  padding:10px 20px;
+  height:40px;
+  align-items: center;
+  color: #fff;
+  background: @darkGray;
+  font: 400 16px/20px @fonts;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.6);
+  transition: background-color .2s ease, box-shadow .2s ease;
+  .no-selection;
+}

@@ -10,7 +10,8 @@ class Dropbox extends React.Component {
    * */
 
   state = {
-    uploading: false
+    uploading: false,
+    isDragOver: false
   };
 
   onSubmit = (e) => {
@@ -24,10 +25,20 @@ class Dropbox extends React.Component {
 
   handleDragEnter = (e) => {
     preventDefaults(e);
+    this.setState({
+      isDragOver: true
+    })
   };
 
   handleDragOver = (e) => {
     preventDefaults(e);
+  };
+
+  handleDragLeave = (e) => {
+    preventDefaults(e);
+    this.setState({
+      isDragOver: false
+    })
   };
 
   handleDrop = (e) => {
@@ -103,7 +114,8 @@ class Dropbox extends React.Component {
         try {
           parseResult = JSON.parse(event.target.result);
         } catch (error) {
-          handleError(parseError)
+          handleError(parseError);
+          return;
         }
         if (parseResult) {
 
@@ -149,29 +161,35 @@ class Dropbox extends React.Component {
     if(this.state.uploading){
       overlay = <div className="drop-box__overlay">Loading...</div>
     }
+    if(this.state.isDragOver){
+      modifier = 'drop-box_drag-over';
+    }
     if(this.props.errors.length){
-      modifier = 'drop-box_error'
+      modifier = 'drop-box_error';
     }
 
     return (
       <form onSubmit={this.onSubmit}
             onDragEnter={this.handleDragEnter}
             onDragOver={this.handleDragOver}
+            onDragLeave={this.handleDragLeave}
             onDrop={this.handleDrop}
             className={"drop-box " + modifier}>
         {overlay}
         <input
+          tabIndex="0"
           ref={(file) => this.file = file}
           onChange={this.handleChange}
           type="file"
-          name="file"
+          id="file"
+          multiple
           className="drop-box__input"
         />
-        <input
-          type="submit"
-          value="Submit"
-          className="drop-box__submit"
-        />
+        <label htmlFor="file"
+               className="drop-box__button">
+          Choose a file
+        </label>
+
       </form>
     )
   }
