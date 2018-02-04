@@ -2,6 +2,7 @@
   "name": "json-counter-test",
   "version": "0.1.0",
   "private": true,
+  "homepage" : "https://github.io/random1911/json-counter-demo/",
   "dependencies": {
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
