@@ -23,19 +23,15 @@ class Dropbox extends React.Component {
   };
 
   handleDragEnter = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
+    preventDefaults(e);
   };
 
   handleDragOver = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
+    preventDefaults(e);
   };
 
   handleDrop = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    console.log('drop');
+    preventDefaults(e);
 
     const
       dt = e.dataTransfer,
@@ -102,6 +98,12 @@ class Dropbox extends React.Component {
         console.log(`Yeah, seems like ${file.name} is a JSON`)
         //TODO: собственно считать объекты, причем где-нибудь не тут
 
+        const resultObject = {
+          name: file.name,
+          body: parseResult
+        };
+
+        this.props.setResult([resultObject]);
 
       }
 
@@ -149,6 +151,11 @@ class Dropbox extends React.Component {
       </form>
     )
   }
+}
+
+function preventDefaults(e) {
+  e.stopPropagation();
+  e.preventDefault();
 }
 
 export default Dropbox;
