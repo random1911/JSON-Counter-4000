@@ -80,7 +80,6 @@ class Dropbox extends React.Component {
 
     const reader = new FileReader();
     reader.onloadstart = (event) => {
-      console.log('load start');
       this.setState({uploading: true});
     };
     reader.onloadend = (event) => {
@@ -94,9 +93,6 @@ class Dropbox extends React.Component {
       }
       if(parseResult){
         this.props.handleError(false);
-
-        console.log(`Yeah, seems like ${file.name} is a JSON`)
-        //TODO: собственно считать объекты, причем где-нибудь не тут
 
         const resultObject = {
           name: file.name,
@@ -121,7 +117,7 @@ class Dropbox extends React.Component {
 
     let
       overlay = null,
-      modifier = null;
+      modifier = '';
     if(this.state.uploading){
       overlay = <div className="drop-box__overlay">Loading...</div>
     }

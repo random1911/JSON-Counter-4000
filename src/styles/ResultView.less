@@ -32,7 +32,7 @@
     display: flex;
     align-items: baseline;
   }
-  &__summary-caption {
+  &__label {
     color: @mediumGray;
     flex:0 0 auto;
     margin: 0 10px 0 0;
@@ -49,6 +49,16 @@
   }
   &__details {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  &__keys-list {
+    resize: vertical;
+    flex: 1;
+    background: #fff;
+    padding: 5px;
+    border: 1px solid @lightGray;
+    font: 400 @baseSize/1.4 @fonts;
   }
 }
 

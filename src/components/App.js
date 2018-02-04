@@ -22,10 +22,17 @@ class App extends Component {
   };
 
   // обнуление стейта для кнопки на резльтате
-  resetState = () => {
+  resetResult = () => {
     this.setState({
       result: []
     })
+  };
+
+  // хэндлер на случай, если возникло желание перетянуть что-то на форму результата
+  dragHandler = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    this.resetResult();
   };
 
   render() {
@@ -40,7 +47,7 @@ class App extends Component {
       contentToDisplay = (
         <ResultView
           content={this.state.result}
-          resetState={this.resetState}
+          resetResult={this.resetResult}
         />
       );
     }else{
@@ -54,7 +61,8 @@ class App extends Component {
     }
 
     return (
-      <div className="app-wrapper">
+      <div className="app-wrapper"
+           onDragEnter={this.dragHandler}>
         <Header />
         <div className="app-body">
           {displayError}
