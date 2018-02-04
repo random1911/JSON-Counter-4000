@@ -1,0 +1,54 @@
+.error-bar {
+  border: 4px solid #EF5350;
+  background: #FFEBEE;
+  font-size: 18px;
+  margin: 20px 0 0;
+  position: relative;
+}
+.error-bar__content {
+  padding: 15px 50px 15px 36px;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+  max-height: 30vh;
+  overflow-y: auto;
+}
+.error-bar__reset {
+  position: absolute;
+  top: 13px;
+  right: 17px;
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  z-index: 1;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  transition: all .2s ease;
+}
+.error-bar__reset:before,
+.error-bar__reset:after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  height: 4px;
+  background: #EF5350;
+  left: 3px;
+  right: 3px;
+  top: 50%;
+  margin-top: -2px;
+}
+.error-bar__reset:before {
+  transform: rotate(45deg);
+}
+.error-bar__reset:after {
+  transform: rotate(-45deg);
+}
+.error-bar__reset:hover,
+.error-bar__reset:focus {
+  outline: none;
+  border-color: #EF5350;
+  background: #fff;
+}
+.error-bar__item:only-child {
+  list-style: none;
+}
