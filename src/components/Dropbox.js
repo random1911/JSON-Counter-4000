@@ -3,29 +3,58 @@ import '../styles/Dropbox.css';
 
 class Dropbox extends React.Component {
 
+  /*
+   * Использовалась информация:
+   * https://reactjs.org/docs/forms.html
+   * https://developer.mozilla.org/en-US/docs/Web/API/File/Using_files_from_web_applications
+   * */
+
   state = {
     uploading: false
   };
 
-
-  //property initializers, конечно, пока экспириментальная возмжность, но вызывать конструктов ради
-  // this.methodName = this.methodName.bind(this) как-то тоже не круто.
   onSubmit = (e) => {
     e.preventDefault();
   };
 
-  /*
-    * Использовалась информация:
-    * https://reactjs.org/docs/forms.html
-    * https://developer.mozilla.org/en-US/docs/Web/API/File/Using_files_from_web_applications
-    * */
   handleChange = (event) => {
+    const file = event.target.files[0];
+    this.handleFile(file);
+  };
+
+  handleDragEnter = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+  };
+
+  handleDragOver = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+  };
+
+  handleDrop = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    console.log('drop');
 
     const
-      file = event.target.files[0],
+      dt = e.dataTransfer,
+      files = dt.files;
+
+    if(files.length>1){
+      //TODO: подумать над вариантом множественной обработки - как и где выводить её результаты
+      this.props.handleError(`we can handle only one file`);
+    }else{
+      this.handleFile(files[0]);
+    }
+  };
+
+  handleFile = (file) => {
+
+    const
       MAX_FILE_SIZE = 1048576,
       extensionError = `the file must be in .txt or .json format.`,
-      sizeError = `the file size must be less than 1mb`,
+      sizeError = `the file size must be less than ${(MAX_FILE_SIZE/1024/1024).toFixed(0)}mb`,
       parseError = `uploaded file "${file.name}" can't be parsed as JSON`,
       uploadError = `can't upload "${file.name}"`;
 
@@ -69,6 +98,11 @@ class Dropbox extends React.Component {
       }
       if(parseResult){
         this.props.handleError(false);
+
+        console.log(`Yeah, seems like ${file.name} is a JSON`)
+        //TODO: собственно считать объекты, причем где-нибудь не тут
+
+
       }
 
     };
@@ -78,9 +112,8 @@ class Dropbox extends React.Component {
 
     reader.readAsText(file);
 
-
-
   };
+
 
   render(){
 
@@ -96,6 +129,9 @@ class Dropbox extends React.Component {
 
     return (
       <form onSubmit={this.onSubmit}
+            onDragEnter={this.handleDragEnter}
+            onDragOver={this.handleDragOver}
+            onDrop={this.handleDrop}
             className={"drop-box " + modifier}>
         {overlay}
         <input
