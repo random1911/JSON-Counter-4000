@@ -43,7 +43,6 @@ class Dropbox extends React.Component {
 
   handleDrop = (e) => {
     preventDefaults(e);
-
     const
       dt = e.dataTransfer,
       files = dt.files;
@@ -63,19 +62,12 @@ class Dropbox extends React.Component {
         uploadError = `can't upload "${file.name}"`;
 
       const handleError = (text) => {
-        //TODO: проверить надобность initErrors
-        let initErrors;
-        if (!this.props.errors.length) {
-          initErrors = []
-        } else {
-          initErrors = this.props.errors;
-        }
         const
           err = {
             text,
             key: Date.now()
           },
-          errors = initErrors.concat([err]);
+          errors = this.props.errors.concat([err]);
         this.props.setError(errors);
       };
 
@@ -128,7 +120,7 @@ class Dropbox extends React.Component {
           /*
           * TODO: Warning: Can only update a mounted or mounting component. This usually means you called setState, replaceState, or forceUpdate on an unmounted component. This is a no-op.
           * Хз, как быть с этой асинхронной магией, но он вроде как работает и ворнинга бы не было, если бы стояло ограничение на 1 файл
-          * Но с несколькими то интереснее. Даже с ворнингом.
+          * Но с несколькими-то интереснее. Даже с ворнингом.
           *
           * JavaScript разработчик решил использовать асинхронные запросы, чтобы решить свои проблемы
           * две проблемы

@@ -10,10 +10,12 @@ class ResultView extends React.Component {
       keys = [];
     function registerObject(key) {
       counter++;
+      // записываю ключи/индексы, по которым найдены объекты
       keys = keys.concat([key]);
     }
 
     function countObject(target){
+      // for in может обойти как объект, как и массив, поэтому я выбрал его.
       for(let key in target){
         if( typeof target[key] === 'object' && target[key]!== null){
           registerObject(key);
@@ -27,10 +29,8 @@ class ResultView extends React.Component {
 
   renderResultItem = (item) => {
     const
-      countResult = this.getCountResult(item.body);
-    //console.log(countResult.keys.map(addLineEnding));
-    const keys = countResult.keys.join('\n');
-
+      countResult = this.getCountResult(item.body),
+      keys = countResult.keys.join('\n');
     return (
       <li key={item.name}
           className="result-view-item">
@@ -59,7 +59,6 @@ class ResultView extends React.Component {
   };
 
   render(){
-
     return (
       <div className="result-view">
         <h2 className="result-view-caption">Here is a counting result:</h2>
