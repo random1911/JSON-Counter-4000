@@ -21,6 +21,17 @@
     cursor: pointer;
     .wh(28px);
     z-index: 1;
+    background: transparent;
+    padding: 0;
+    border:none;
+    &:focus {
+      outline: none;
+    }
+  }
+  &__reset-inner {
+    position: relative;
+    .ib;
+    .wh(28px);
     border: 2px solid transparent;
     border-radius: 50%;
     transition: all .2s ease;
@@ -41,11 +52,11 @@
     &:after {
       transform: rotate(-45deg);
     }
-    &:hover, &:focus {
-      outline: none;
-      border-color: @errorBorder;
-      background: #fff;
-    }
+  }
+  &__reset:focus &__reset-inner,
+  &__reset:hover &__reset-inner {
+    border-color: @errorBorder;
+    background: #fff;
   }
   &__item:only-child {
     list-style: none;

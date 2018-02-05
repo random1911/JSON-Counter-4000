@@ -47,6 +47,9 @@ class Dropbox extends React.Component {
       dt = e.dataTransfer,
       files = dt.files;
     this.handleFile(files);
+    this.setState({
+      isDragOver: false
+    });
   };
 
   handleFile = (files) => {
@@ -56,7 +59,7 @@ class Dropbox extends React.Component {
 
       const
         MAX_FILE_SIZE = 1048576,
-        extensionError = `${file.name}" don't have .txt or .json format.`,
+        extensionError = `${file.name}" don't have .json or .txt format.`,
         sizeError = `"${file.name}" is grater then ${(MAX_FILE_SIZE / 1024 / 1024).toFixed(0)}mb`,
         parseError = `uploaded file "${file.name}" can't be parsed as JSON`,
         uploadError = `can't upload "${file.name}"`;
@@ -65,9 +68,14 @@ class Dropbox extends React.Component {
         const
           err = {
             text,
-            key: Date.now()
+            key: `${file.name}_${Date.now()}`
           },
-          errors = this.props.errors.concat([err]);
+          errors = this.props.errors;
+        /*
+        * гайды в интернете не рекомендуют использовать push и склоняют к concat, типа что push - очень медленный,
+        * тем не менее, c concat этот код реботал неадекватно и показывал не все ошибки, а с push - все.
+        * */
+        errors.push(err);
         this.props.setError(errors);
       };
 
@@ -181,6 +189,9 @@ class Dropbox extends React.Component {
                className="drop-box__button">
           Choose a file
         </label>
+        <p className="drop-box__description">
+          File have to be JSON in .json/.txt format and less than 1mb
+        </p>
 
       </form>
     )
