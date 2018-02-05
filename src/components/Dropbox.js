@@ -65,9 +65,14 @@ class Dropbox extends React.Component {
         const
           err = {
             text,
-            key: Date.now()
+            key: `${file.name}_${Date.now()}`
           },
-          errors = this.props.errors.concat([err]);
+          errors = this.props.errors;
+        /*
+        * гайды в интернете не рекомендуют использовать push и склоняют к concat, типа что push - очень медленный,
+        * тем не менее, c concat этот код реботал неадекватно и показывал не все ошибки, а с push - все.
+        * */
+        errors.push(err);
         this.props.setError(errors);
       };
 
