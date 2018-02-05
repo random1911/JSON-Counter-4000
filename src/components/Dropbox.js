@@ -59,7 +59,7 @@ class Dropbox extends React.Component {
 
       const
         MAX_FILE_SIZE = 1048576,
-        extensionError = `${file.name}" don't have .txt or .json format.`,
+        extensionError = `${file.name}" don't have .json or .txt format.`,
         sizeError = `"${file.name}" is grater then ${(MAX_FILE_SIZE / 1024 / 1024).toFixed(0)}mb`,
         parseError = `uploaded file "${file.name}" can't be parsed as JSON`,
         uploadError = `can't upload "${file.name}"`;
@@ -189,6 +189,9 @@ class Dropbox extends React.Component {
                className="drop-box__button">
           Choose a file
         </label>
+        <p className="drop-box__description">
+          File have to be JSON in .json/.txt format and less than 1mb
+        </p>
 
       </form>
     )
