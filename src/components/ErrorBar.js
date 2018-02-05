@@ -17,17 +17,17 @@ const ErrorBar = (props) => {
       props.clearErrors()
     };
 
-
   return (
     <div className="error-bar">
       <ol className="error-bar__content">
         {props.errors.map(renderError)}
       </ol>
-      <a href="#"
-         tabIndex="0"
+      <button
          title="Clear errors"
          onClick={(e) => onClearErrors(e)}
-         className="error-bar__reset" />
+         className="error-bar__reset">
+        <span className="error-bar__reset-inner" />
+      </button>
     </div>
   )
 };
