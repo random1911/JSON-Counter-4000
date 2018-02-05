@@ -47,6 +47,9 @@ class Dropbox extends React.Component {
       dt = e.dataTransfer,
       files = dt.files;
     this.handleFile(files);
+    this.setState({
+      isDragOver: false
+    });
   };
 
   handleFile = (files) => {
