@@ -5,7 +5,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 20px 40px;
+  margin: 20px;
   border: 2px dashed #263238;
   border-radius: 15px;
   position: relative;
@@ -88,6 +88,14 @@
   background-color: #f5f5f5;
   background-image: repeating-linear-gradient(45deg, #A5D6A7, #A5D6A7 35px, #E8F5E9 35px, #E8F5E9 70px);
   animation: backgroundMove 20s linear infinite;
+}
+.drop-box__description {
+  margin: 20px;
+}
+@media screen and (min-width: 800px) {
+  .drop-box {
+    margin: 20px 40px;
+  }
 }
 @keyframes backgroundMove {
   0% {

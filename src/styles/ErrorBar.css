@@ -6,17 +6,15 @@
   position: relative;
 }
 .error-bar__content {
-  padding: 15px 50px 15px 36px;
+  padding: 15px 50px 15px 16px;
   margin: 0;
   position: relative;
   z-index: 1;
-  max-height: 30vh;
-  overflow-y: auto;
 }
 .error-bar__reset {
   position: absolute;
   top: 13px;
-  right: 17px;
+  right: 13px;
   cursor: pointer;
   width: 28px;
   height: 28px;
@@ -61,6 +59,14 @@
   border-color: #EF5350;
   background: #fff;
 }
+.error-bar__item {
+  list-style-position: inside;
+}
 .error-bar__item:only-child {
   list-style: none;
+}
+@media screen and (min-width: 800px) {
+  .error-bar__content {
+    padding-left: 36px;
+  }
 }

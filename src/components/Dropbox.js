@@ -13,6 +13,16 @@ class Dropbox extends React.Component {
     uploading: false,
     isDragOver: false
   };
+  _MAX_FILE_SIZE = 1048576;
+  MAX_FILE_SIZE_IN_MB = (this._MAX_FILE_SIZE / 1024 / 1024).toFixed(0);
+
+  /*
+  * https://reactjs.org/blog/2015/12/16/ismounted-antipattern.html
+  * Для решения проблемы
+  * Warning: Can only update a mounted or mounting component. This usually means you called setState, replaceState, or forceUpdate on an unmounted component. This is a no-op.
+  * */
+  _isMounted = false;
+
 
   onSubmit = (e) => {
     e.preventDefault();
@@ -43,13 +53,15 @@ class Dropbox extends React.Component {
 
   handleDrop = (e) => {
     preventDefaults(e);
-    const
-      dt = e.dataTransfer,
-      files = dt.files;
-    this.handleFile(files);
-    this.setState({
-      isDragOver: false
-    });
+    if(!this.state.uploading){
+      const
+        dt = e.dataTransfer,
+        files = dt.files;
+      this.handleFile(files);
+      this.setState({
+        isDragOver: false
+      });
+    }
   };
 
   handleFile = (files) => {
@@ -58,9 +70,9 @@ class Dropbox extends React.Component {
     const checkFile = (file) => {
 
       const
-        MAX_FILE_SIZE = 1048576,
-        extensionError = `${file.name}" don't have .json or .txt format.`,
-        sizeError = `"${file.name}" is grater then ${(MAX_FILE_SIZE / 1024 / 1024).toFixed(0)}mb`,
+        MAX_FILE_SIZE = this._MAX_FILE_SIZE,
+        extensionError = `"${file.name}" don't have .json or .txt format.`,
+        sizeError = `"${file.name}" is grater than ${this.MAX_FILE_SIZE_IN_MB}mb`,
         parseError = `uploaded file "${file.name}" can't be parsed as JSON`,
         uploadError = `can't upload "${file.name}"`;
 
@@ -105,10 +117,14 @@ class Dropbox extends React.Component {
 
       const reader = new FileReader();
       reader.onloadstart = (event) => {
-        this.setState({uploading: true});
+        if(this._isMounted){
+          this.setState({uploading: true});
+        }
       };
       reader.onloadend = (event) => {
-        this.setState({uploading: false});
+        if(this._isMounted){
+          this.setState({uploading: false});
+        }
         let parseResult = false;
         // проверяем, парсится ли полученный объект как JSON
         try {
@@ -125,17 +141,7 @@ class Dropbox extends React.Component {
           };
 
           result = result.concat([resultObject]);
-          /*
-          * TODO: Warning: Can only update a mounted or mounting component. This usually means you called setState, replaceState, or forceUpdate on an unmounted component. This is a no-op.
-          * Хз, как быть с этой асинхронной магией, но он вроде как работает и ворнинга бы не было, если бы стояло ограничение на 1 файл
-          * Но с несколькими-то интереснее. Даже с ворнингом.
-          *
-          * JavaScript разработчик решил использовать асинхронные запросы, чтобы решить свои проблемы
-          * две проблемы
-          * Теперь у него
-          *
-          * */
-
+          
           this.props.setResult(result);
         }
 
@@ -152,6 +158,13 @@ class Dropbox extends React.Component {
 
   };
 
+  componentDidMount() {
+    this._isMounted = true;
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
 
   render(){
 
@@ -161,7 +174,7 @@ class Dropbox extends React.Component {
     if(this.state.uploading){
       overlay = <div className="drop-box__overlay">Loading...</div>
     }
-    if(this.state.isDragOver){
+    if(this.state.isDragOver && !this.state.uploading){
       modifier = 'drop-box_drag-over';
     }
     if(this.props.errors.length){
@@ -190,7 +203,7 @@ class Dropbox extends React.Component {
           Choose a file
         </label>
         <p className="drop-box__description">
-          File have to be JSON in .json/.txt format and less than 1mb
+          File have to be JSON in .json/.txt format and less than {this.MAX_FILE_SIZE_IN_MB}mb
         </p>
 
       </form>
