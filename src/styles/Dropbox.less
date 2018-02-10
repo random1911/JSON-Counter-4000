@@ -1,0 +1,86 @@
+@import "variables";
+
+.drop-box {
+  flex: 1;
+  min-height: 200px;
+  .flexCenterAlignment;
+  margin: @smallScreenSideIndent;
+  border: 2px dashed @darkGray;
+  border-radius: 15px;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  &_error {
+    border-color: @errorBorder;
+  }
+  &_drag-over {
+    background: @green50;
+  }
+  &__input {
+    position: absolute;
+    opacity: 0;
+    top: -100%;
+    left: -100%;
+  }
+  &__button {
+    padding: 20px 40px;
+    position: relative;
+    .buttonStyle();
+    .ib;
+    &:hover {
+      background: @mediumGray;
+    }
+    &:active {
+      top:1px;
+      box-shadow: 0 1px 2px rgba(0,0,0,.3);;
+    }
+  }
+  &__input:focus + &__button {
+    &:before {
+      content:"";
+      position: absolute;
+      .fillContainer(3px);
+      border: 1px dashed #fff;
+      border-radius: 2px;
+    }
+  }
+  &__overlay {
+    .fillContainer(0);
+    z-index: 1;
+    overflow: hidden;
+    .flexCenterAlignment;
+    font-size: 40px;
+    text-shadow: 1px 1px #fff;
+    &:before{
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 200%;
+      z-index: -1;
+      background-color: @bgColor;
+      // лоадер на скорую руку
+      background-image: repeating-linear-gradient(45deg, @green200, @green200 35px, @green50 35px, @green50 70px);
+      animation: backgroundMove 20s linear infinite;
+    }
+  }
+  &__description {
+    margin: 20px;
+  }
+}
+
+@media screen and (min-width: @wideSize) {
+  .drop-box {
+    margin: 20px @wideScreenSideIndent;
+  }
+}
+
+@keyframes backgroundMove {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}

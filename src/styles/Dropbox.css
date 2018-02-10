@@ -1,0 +1,107 @@
+.drop-box {
+  flex: 1;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+  border: 2px dashed #263238;
+  border-radius: 15px;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+.drop-box_error {
+  border-color: #EF5350;
+}
+.drop-box_drag-over {
+  background: #E8F5E9;
+}
+.drop-box__input {
+  position: absolute;
+  opacity: 0;
+  top: -100%;
+  left: -100%;
+}
+.drop-box__button {
+  padding: 20px 40px;
+  position: relative;
+  cursor: pointer;
+  border: none;
+  padding: 10px 20px;
+  height: 40px;
+  align-items: center;
+  color: #fff;
+  background: #263238;
+  font: 400 16px/20px 'Ubuntu', sans-serif;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  display: inline-block;
+  vertical-align: top;
+}
+.drop-box__button:hover {
+  background: #455A64;
+}
+.drop-box__button:active {
+  top: 1px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+.drop-box__input:focus + .drop-box__button:before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  bottom: 3px;
+  left: 3px;
+  border: 1px dashed #fff;
+  border-radius: 2px;
+}
+.drop-box__overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
+  text-shadow: 1px 1px #fff;
+}
+.drop-box__overlay:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  z-index: -1;
+  background-color: #f5f5f5;
+  background-image: repeating-linear-gradient(45deg, #A5D6A7, #A5D6A7 35px, #E8F5E9 35px, #E8F5E9 70px);
+  animation: backgroundMove 20s linear infinite;
+}
+.drop-box__description {
+  margin: 20px;
+}
+@media screen and (min-width: 800px) {
+  .drop-box {
+    margin: 20px 40px;
+  }
+}
+@keyframes backgroundMove {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
