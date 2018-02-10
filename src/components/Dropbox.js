@@ -14,6 +14,14 @@ class Dropbox extends React.Component {
     isDragOver: false
   };
 
+  /*
+  * https://reactjs.org/blog/2015/12/16/ismounted-antipattern.html
+  * Для решения проблемы
+  * Warning: Can only update a mounted or mounting component. This usually means you called setState, replaceState, or forceUpdate on an unmounted component. This is a no-op.
+  * */
+  _isMounted = false;
+
+
   onSubmit = (e) => {
     e.preventDefault();
   };
@@ -105,10 +113,14 @@ class Dropbox extends React.Component {
 
       const reader = new FileReader();
       reader.onloadstart = (event) => {
-        this.setState({uploading: true});
+        if(this._isMounted){
+          this.setState({uploading: true});
+        }
       };
       reader.onloadend = (event) => {
-        this.setState({uploading: false});
+        if(this._isMounted){
+          this.setState({uploading: false});
+        }
         let parseResult = false;
         // проверяем, парсится ли полученный объект как JSON
         try {
@@ -125,17 +137,7 @@ class Dropbox extends React.Component {
           };
 
           result = result.concat([resultObject]);
-          /*
-          * TODO: Warning: Can only update a mounted or mounting component. This usually means you called setState, replaceState, or forceUpdate on an unmounted component. This is a no-op.
-          * Хз, как быть с этой асинхронной магией, но он вроде как работает и ворнинга бы не было, если бы стояло ограничение на 1 файл
-          * Но с несколькими-то интереснее. Даже с ворнингом.
-          *
-          * JavaScript разработчик решил использовать асинхронные запросы, чтобы решить свои проблемы
-          * две проблемы
-          * Теперь у него
-          *
-          * */
-
+          
           this.props.setResult(result);
         }
 
@@ -152,6 +154,13 @@ class Dropbox extends React.Component {
 
   };
 
+  componentDidMount() {
+    this._isMounted = true;
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
 
   render(){
 
