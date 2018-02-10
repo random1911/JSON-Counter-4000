@@ -13,6 +13,8 @@ class Dropbox extends React.Component {
     uploading: false,
     isDragOver: false
   };
+  _MAX_FILE_SIZE = 1048576;
+  MAX_FILE_SIZE_IN_MB = (this._MAX_FILE_SIZE / 1024 / 1024).toFixed(0);
 
   /*
   * https://reactjs.org/blog/2015/12/16/ismounted-antipattern.html
@@ -68,9 +70,9 @@ class Dropbox extends React.Component {
     const checkFile = (file) => {
 
       const
-        MAX_FILE_SIZE = 1048576,
+        MAX_FILE_SIZE = this._MAX_FILE_SIZE,
         extensionError = `${file.name}" don't have .json or .txt format.`,
-        sizeError = `"${file.name}" is grater then ${(MAX_FILE_SIZE / 1024 / 1024).toFixed(0)}mb`,
+        sizeError = `"${file.name}" is grater than ${this.MAX_FILE_SIZE_IN_MB}mb`,
         parseError = `uploaded file "${file.name}" can't be parsed as JSON`,
         uploadError = `can't upload "${file.name}"`;
 
@@ -201,7 +203,7 @@ class Dropbox extends React.Component {
           Choose a file
         </label>
         <p className="drop-box__description">
-          File have to be JSON in .json/.txt format and less than 1mb
+          File have to be JSON in .json/.txt format and less than {this.MAX_FILE_SIZE_IN_MB}mb
         </p>
 
       </form>
