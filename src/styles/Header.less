@@ -1,7 +1,7 @@
 @import "variables";
 
 .app-header {
-  padding: 40px;
+  padding: @smallScreenSideIndent;
   color: #fff;
   .blue-violet-grad();
   text-shadow: 1px 1px rgba(0, 0,0,.5);
@@ -10,10 +10,19 @@
 
 .app-logo {
   margin: 0;
-  font: 400 60px/1 @logoFont;
+  font: 400 40px/1 @logoFont;
 }
 
 .app-description {
   margin: 0;
   font-size: 18px;
+}
+
+@media screen and (min-width: @wideSize) {
+  .app-header {
+    padding: @wideScreenSideIndent;
+  }
+  .app-logo {
+    font-size: 60px;
+  }
 }

@@ -4,7 +4,7 @@
   flex: 1;
   min-height: 200px;
   .flexCenterAlignment;
-  margin: 20px 40px;
+  margin: @smallScreenSideIndent;
   border: 2px dashed @darkGray;
   border-radius: 15px;
   position: relative;
@@ -64,6 +64,15 @@
       background-image: repeating-linear-gradient(45deg, @green200, @green200 35px, @green50 35px, @green50 70px);
       animation: backgroundMove 20s linear infinite;
     }
+  }
+  &__description {
+    margin: 20px;
+  }
+}
+
+@media screen and (min-width: @wideSize) {
+  .drop-box {
+    margin: 20px @wideScreenSideIndent;
   }
 }
 

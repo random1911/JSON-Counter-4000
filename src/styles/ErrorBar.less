@@ -7,7 +7,7 @@
   margin: 20px 0 0;
   position: relative;
   &__content {
-    padding: 15px 50px 15px 36px;
+    padding: 15px 50px 15px (@smallScreenSideIndent - 4);
     margin: 0;
     position: relative;
     z-index: 1;
@@ -17,7 +17,7 @@
   &__reset {
     position: absolute;
     top: 13px;
-    right: 17px;
+    right: 13px;
     cursor: pointer;
     .wh(28px);
     z-index: 1;
@@ -58,8 +58,18 @@
     border-color: @errorBorder;
     background: #fff;
   }
+  &__item {
+    list-style-position: inside;
+  }
   &__item:only-child {
     list-style: none;
   }
+}
 
+@media screen and (min-width: @wideSize) {
+  .error-bar {
+    &__content {
+      padding-left: (@wideScreenSideIndent - 4);
+    }
+  }
 }
