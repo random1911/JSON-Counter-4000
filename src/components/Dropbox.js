@@ -51,13 +51,15 @@ class Dropbox extends React.Component {
 
   handleDrop = (e) => {
     preventDefaults(e);
-    const
-      dt = e.dataTransfer,
-      files = dt.files;
-    this.handleFile(files);
-    this.setState({
-      isDragOver: false
-    });
+    if(!this.state.uploading){
+      const
+        dt = e.dataTransfer,
+        files = dt.files;
+      this.handleFile(files);
+      this.setState({
+        isDragOver: false
+      });
+    }
   };
 
   handleFile = (files) => {
@@ -170,7 +172,7 @@ class Dropbox extends React.Component {
     if(this.state.uploading){
       overlay = <div className="drop-box__overlay">Loading...</div>
     }
-    if(this.state.isDragOver){
+    if(this.state.isDragOver && !this.state.uploading){
       modifier = 'drop-box_drag-over';
     }
     if(this.props.errors.length){
