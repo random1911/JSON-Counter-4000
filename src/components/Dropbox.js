@@ -66,7 +66,6 @@ class Dropbox extends React.Component {
 
   handleFile = (files) => {
 
-    let result = [];
     const checkFile = (file) => {
 
       const
@@ -128,15 +127,12 @@ class Dropbox extends React.Component {
           return;
         }
         if (parseResult) {
-
-          const resultObject = {
+          const newResult = {
             name: file.name,
             body: parseResult
           };
 
-          result = result.concat([resultObject]);
-          
-          this.props.setResult(result);
+          this.props.setResult(newResult);
         }
 
       };

@@ -27,8 +27,12 @@ class App extends Component {
   };
 
   // передать на подсчет валидные JSON файлы
-  setResult = (result) => {
-    this.setState({ result })
+  setResult = (newResult) => {
+    //this.setState({ result })
+    this.setState(prevState => {
+      const result = prevState.result.concat(newResult);
+      return {result};
+    })
   };
 
   // обнуление стейта для кнопки на резльтате
