@@ -28,7 +28,6 @@ class App extends Component {
 
   // передать на подсчет валидные JSON файлы
   setResult = (newResult) => {
-    //this.setState({ result })
     this.setState(prevState => {
       const result = prevState.result.concat(newResult);
       return {result};
