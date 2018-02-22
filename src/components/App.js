@@ -12,8 +12,11 @@ class App extends Component {
   };
 
   // вывести собщения об ошиках
-  setError = (errors) => {
-    this.setState({ errors })
+  setError = (error) => {
+    this.setState(prevState => {
+      const errors = prevState.errors.concat(error);
+      return {errors};
+    })
   };
 
   // очистить сообщения об ошибках
