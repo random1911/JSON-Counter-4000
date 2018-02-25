@@ -3,18 +3,15 @@ import Button from './Button';
 
 const ErrorBar = (props) => {
 
-  const
-    renderError = (error) => {
-      return (
-        <li key={error.key}
-            className="error-bar__item">
-          <strong>Error:</strong> {error.text}
-        </li>
-      )
-    },
-    onClearErrors = () => {
-      props.clearErrors()
-    };
+  const renderError = (error) => {
+    return (
+      <li key={error.key}
+          className="error-bar__item">
+        <strong>Error:</strong> {error.text}
+      </li>
+    )
+  };
+
 
   return (
     <div className="error-bar">
@@ -24,7 +21,7 @@ const ErrorBar = (props) => {
       <Button
         baseClass="error-bar-reset"
         tip="Clear errors"
-        action={onClearErrors}
+        action={props.clearErrors}
       />
     </div>
   )
