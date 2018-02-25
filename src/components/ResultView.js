@@ -1,6 +1,5 @@
 import React from 'react';
 import Button from './Button';
-import '../styles/ResultView.css'
 
 class ResultView extends React.Component {
 

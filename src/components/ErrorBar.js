@@ -1,6 +1,5 @@
 import React from 'react';
 import Button from './Button';
-import '../styles/ErrorBar.css';
 
 const ErrorBar = (props) => {
 

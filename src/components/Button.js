@@ -1,5 +1,4 @@
 import React from 'react';
-import '../styles/Button.css';
 
 /*
 * https://github.com/random1911/universal-button

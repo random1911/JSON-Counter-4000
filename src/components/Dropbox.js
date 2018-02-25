@@ -1,6 +1,5 @@
 import React from 'react';
 import Button from './Button';
-import '../styles/Dropbox.css';
 
 class Dropbox extends React.Component {
 
