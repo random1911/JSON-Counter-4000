@@ -14,28 +14,34 @@
     //max-height: 30vh;
     //overflow-y: auto;
   }
-  &__reset {
-    position: absolute;
-    top: 13px;
-    right: 13px;
-    cursor: pointer;
-    .wh(28px);
-    z-index: 1;
-    background: transparent;
-    padding: 0;
-    border:none;
-    &:focus {
-      outline: none;
-    }
+  &__item {
+    list-style-position: inside;
   }
-  &__reset-inner {
+  &__item:only-child {
+    list-style: none;
+  }
+}
+.error-bar-reset {
+  position: absolute;
+  top: 13px;
+  right: 13px;
+  cursor: pointer;
+  .wh(28px);
+  z-index: 1;
+  background: transparent;
+  padding: 0;
+  border:none;
+  &:focus {
+    outline: none;
+  }
+  &__inner {
     position: relative;
     .ib;
     .wh(28px);
     border: 2px solid transparent;
     border-radius: 50%;
     transition: all .2s ease;
-    &:before, &:after {
+    &::before, &::after {
       content:"";
       position: absolute;
       z-index: 1;
@@ -46,25 +52,20 @@
       top: 50%;
       margin-top: -2px;
     }
-    &:before {
+    &::before {
       transform: rotate(45deg);
     }
-    &:after {
+    &::after {
       transform: rotate(-45deg);
     }
   }
-  &__reset:focus &__reset-inner,
-  &__reset:hover &__reset-inner {
+  &:focus &__inner,
+  &:hover &__inner {
     border-color: @errorBorder;
     background: #fff;
   }
-  &__item {
-    list-style-position: inside;
-  }
-  &__item:only-child {
-    list-style: none;
-  }
 }
+
 
 @media screen and (min-width: @wideSize) {
   .error-bar {

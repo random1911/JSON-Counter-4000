@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from './Button';
 import '../styles/ErrorBar.css';
 
 const ErrorBar = (props) => {
@@ -12,8 +13,7 @@ const ErrorBar = (props) => {
         </li>
       )
     },
-    onClearErrors = (e) => {
-      e.preventDefault();
+    onClearErrors = () => {
       props.clearErrors()
     };
 
@@ -22,12 +22,11 @@ const ErrorBar = (props) => {
       <ol className="error-bar__content">
         {props.errors.map(renderError)}
       </ol>
-      <button
-         title="Clear errors"
-         onClick={(e) => onClearErrors(e)}
-         className="error-bar__reset">
-        <span className="error-bar__reset-inner" />
-      </button>
+      <Button
+        baseClass="error-bar-reset"
+        tip="Clear errors"
+        action={onClearErrors}
+      />
     </div>
   )
 };

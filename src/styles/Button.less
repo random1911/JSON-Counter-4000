@@ -5,24 +5,40 @@
   position: relative;
   text-decoration: none;
   .buttonStyle();
-  &__label {
-    position: relative;
+  &::after {
+    .buttonIeActiveFix;
   }
-  &:hover {
+  &:hover:not(:disabled) {
     background: @mediumGray;
   }
   &:focus {
     outline: none;
-    &:before {
-      content:"";
-      position: absolute;
-      .fillContainer(3px);
-      border: 1px dashed #fff;
-      border-radius: 2px;
+    &::before {
+      .buttonFocusBefore();
     }
   }
-  &:active {
+  &:active:not(:disabled) {
     top:1px;
     box-shadow: 0 1px 2px rgba(0,0,0,.3);;
+  }
+  &__inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  &__text {
+    margin: 0 10px;
+  }
+  //&__icon {
+  //  .wh(20px);
+  //  background: no-repeat center;
+  //  position: relative;
+  //  &:only-child {
+  //    margin:0;
+  //  }
+  //}
+  &:disabled {
+    opacity: .5;
+    cursor: default;
   }
 }

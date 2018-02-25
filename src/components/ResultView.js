@@ -66,7 +66,10 @@ class ResultView extends React.Component {
           {this.props.content.map(this.renderResultItem)}
         </ul>
         <div className="result-view-footer">
-          <Button text="Count something else" onClick={() => this.props.resetResult()} />
+          <Button
+            text="Count something else"
+            action={this.props.resetResult}
+          />
         </div>
       </div>
     )
