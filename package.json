@@ -2,13 +2,16 @@
   "name": "json-counter-test",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://random1911.github.io/json-counter-demo/",
+  "homepage": "https://random1911.github.io/JSON-Counter-4000/",
   "dependencies": {
+    "gh-pages": "^1.1.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-scripts": "1.1.0"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",

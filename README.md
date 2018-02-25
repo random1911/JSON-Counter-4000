@@ -12,4 +12,4 @@
 
 ## Собранное приложение
 
-Доступно по ссылке: [random1911.github.io/json-counter-demo/](https://random1911.github.io/json-counter-demo/)
+Доступно по ссылке: [https://random1911.github.io/JSON-Counter-4000/](https://random1911.github.io/JSON-Counter-4000/)
