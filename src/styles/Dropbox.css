@@ -24,35 +24,7 @@
   top: -100%;
   left: -100%;
 }
-.drop-box__button {
-  padding: 20px 40px;
-  position: relative;
-  cursor: pointer;
-  border: none;
-  padding: 10px 20px;
-  height: 40px;
-  align-items: center;
-  color: #fff;
-  background: #263238;
-  font: 400 16px/20px 'Ubuntu', sans-serif;
-  border-radius: 2px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
-  transition: background-color 0.2s ease, box-shadow 0.2s ease;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  display: inline-block;
-  vertical-align: top;
-}
-.drop-box__button:hover {
-  background: #455A64;
-}
-.drop-box__button:active {
-  top: 1px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-}
-.drop-box__input:focus + .drop-box__button:before {
+.drop-box__input:focus + .button::before {
   content: "";
   position: absolute;
   top: 3px;
@@ -77,7 +49,7 @@
   font-size: 40px;
   text-shadow: 1px 1px #fff;
 }
-.drop-box__overlay:before {
+.drop-box__overlay::before {
   content: "";
   position: absolute;
   top: 0;

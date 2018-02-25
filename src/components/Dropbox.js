@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/Dropbox.css';
+import Button from './Button';
 
 class Dropbox extends React.Component {
 
@@ -188,10 +188,11 @@ class Dropbox extends React.Component {
           multiple
           className="drop-box__input"
         />
-        <label htmlFor="file"
-               className="drop-box__button">
-          Choose a file
-        </label>
+        <Button
+          type="label"
+          inputId="file"
+          text="Choose a file"
+        />
         <p className="drop-box__description">
           File have to be JSON in .json/.txt format and less than {this.MAX_FILE_SIZE_IN_MB}mb
         </p>

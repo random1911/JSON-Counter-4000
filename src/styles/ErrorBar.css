@@ -11,7 +11,13 @@
   position: relative;
   z-index: 1;
 }
-.error-bar__reset {
+.error-bar__item {
+  list-style-position: inside;
+}
+.error-bar__item:only-child {
+  list-style: none;
+}
+.error-bar-reset {
   position: absolute;
   top: 13px;
   right: 13px;
@@ -23,10 +29,10 @@
   padding: 0;
   border: none;
 }
-.error-bar__reset:focus {
+.error-bar-reset:focus {
   outline: none;
 }
-.error-bar__reset-inner {
+.error-bar-reset__inner {
   position: relative;
   display: inline-block;
   vertical-align: top;
@@ -36,8 +42,8 @@
   border-radius: 50%;
   transition: all .2s ease;
 }
-.error-bar__reset-inner:before,
-.error-bar__reset-inner:after {
+.error-bar-reset__inner::before,
+.error-bar-reset__inner::after {
   content: "";
   position: absolute;
   z-index: 1;
@@ -48,22 +54,16 @@
   top: 50%;
   margin-top: -2px;
 }
-.error-bar__reset-inner:before {
+.error-bar-reset__inner::before {
   transform: rotate(45deg);
 }
-.error-bar__reset-inner:after {
+.error-bar-reset__inner::after {
   transform: rotate(-45deg);
 }
-.error-bar__reset:focus .error-bar__reset-inner,
-.error-bar__reset:hover .error-bar__reset-inner {
+.error-bar-reset:focus .error-bar-reset__inner,
+.error-bar-reset:hover .error-bar-reset__inner {
   border-color: #EF5350;
   background: #fff;
-}
-.error-bar__item {
-  list-style-position: inside;
-}
-.error-bar__item:only-child {
-  list-style: none;
 }
 @media screen and (min-width: 800px) {
   .error-bar__content {

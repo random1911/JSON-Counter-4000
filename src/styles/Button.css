@@ -4,30 +4,36 @@
   text-decoration: none;
   cursor: pointer;
   border: none;
-  padding: 10px 20px;
-  height: 40px;
+  padding: 10px;
   align-items: center;
+  font: 400 16px/20px 'Ubuntu', sans-serif;
   color: #fff;
   background: #263238;
-  font: 400 16px/20px 'Ubuntu', sans-serif;
   border-radius: 2px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
   transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  white-space: nowrap;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
 }
-.button__label {
-  position: relative;
+.button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: url('data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7') repeat;
 }
-.button:hover {
+.button:hover:not(:disabled) {
   background: #455A64;
 }
 .button:focus {
   outline: none;
 }
-.button:focus:before {
+.button:focus::before {
   content: "";
   position: absolute;
   top: 3px;
@@ -37,7 +43,19 @@
   border: 1px dashed #fff;
   border-radius: 2px;
 }
-.button:active {
+.button:active:not(:disabled) {
   top: 1px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+.button__inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.button__text {
+  margin: 0 10px;
+}
+.button:disabled {
+  opacity: .5;
+  cursor: default;
 }

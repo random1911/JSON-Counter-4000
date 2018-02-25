@@ -20,6 +20,10 @@
 @smallScreenSideIndent: 20px;
 @wideScreenSideIndent: 40px;
 
+.transparent-bg-ie() {
+  background: url('data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7') repeat;
+}
+
 .blue-violet-grad(){
   background-color: #784BA0;
   background-image: linear-gradient(225deg, #FF3CAC 0%, #784BA0 50%, #2B86C5 100%);
@@ -41,7 +45,7 @@
   display: inline-block;
   vertical-align: @align;
 }
-.no-selection(){
+.noSelection(){
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -68,14 +72,30 @@
 .buttonStyle() {
   cursor: pointer;
   border:none;
-  padding:10px 20px;
-  height:40px;
+  padding:10px;
   align-items: center;
+  font: 400 16px/20px @fonts;
   color: #fff;
   background: @darkGray;
-  font: 400 16px/20px @fonts;
   border-radius: 2px;
   box-shadow: 0 1px 3px rgba(0,0,0,.6);
   transition: background-color .2s ease, box-shadow .2s ease;
-  .no-selection;
+  white-space: nowrap;
+  .noSelection;
+}
+
+.buttonFocusBefore() {
+  content:"";
+  position: absolute;
+  .fillContainer(3px);
+  border: 1px dashed #fff;
+  border-radius: 2px;
+}
+
+.buttonIeActiveFix(){
+  // костыль для active в IE
+  content:"";
+  position: absolute;
+  .fillContainer(0);
+  .transparent-bg-ie;
 }
