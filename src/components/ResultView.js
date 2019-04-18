@@ -1,11 +1,9 @@
-import React from 'react';
-import Button from './Button';
+import React from "react";
+import Button from "./Button";
 
 class ResultView extends React.Component {
-
-  getCountResult = (json) => {
-    let
-      counter = 0,
+  getCountResult = json => {
+    let counter = 0,
       keys = [];
     function registerObject(key) {
       counter++;
@@ -13,26 +11,24 @@ class ResultView extends React.Component {
       keys = keys.concat([key]);
     }
 
-    function countObject(target){
+    function countObject(target) {
       // for in может обойти как объект, как и массив, поэтому я выбрал его.
-      for(let key in target){
-        if( typeof target[key] === 'object' && target[key]!== null){
+      for (let key in target) {
+        if (typeof target[key] === "object" && target[key] !== null) {
           registerObject(key);
           countObject(target[key]);
         }
       }
     }
     countObject(json);
-    return {counter, keys};
+    return { counter, keys };
   };
 
-  renderResultItem = (item) => {
-    const
-      countResult = this.getCountResult(item.body),
-      keys = countResult.keys.join('\n');
+  renderResultItem = item => {
+    const countResult = this.getCountResult(item.body),
+      keys = countResult.keys.join("\n");
     return (
-      <li key={item.name}
-          className="result-view-item">
+      <li key={item.name} className="result-view-item">
         <div className="result-view-item__summary">
           <div className="result-view-item__summary-row">
             <span className="result-view-item__label">File name:</span>
@@ -48,16 +44,16 @@ class ResultView extends React.Component {
         <div className="result-view-item__details">
           <span className="result-view-item__label">Keys:</span>
           <textarea
-            readOnly="true"
+            readOnly
             className="result-view-item__keys-list"
-            defaultValue={keys}>
-          </textarea>
+            defaultValue={keys}
+          />
         </div>
       </li>
-    )
+    );
   };
 
-  render(){
+  render() {
     return (
       <div className="result-view">
         <h2 className="result-view-caption">Here is a counting result:</h2>
@@ -65,13 +61,10 @@ class ResultView extends React.Component {
           {this.props.content.map(this.renderResultItem)}
         </ul>
         <div className="result-view-footer">
-          <Button
-            text="Count something else"
-            action={this.props.resetResult}
-          />
+          <Button text="Count something else" action={this.props.resetResult} />
         </div>
       </div>
-    )
+    );
   }
 }
 

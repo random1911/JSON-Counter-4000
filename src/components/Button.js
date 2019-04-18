@@ -1,9 +1,5 @@
 import React from 'react';
 
-/*
-* https://github.com/random1911/universal-button
-* */
-
 const Button = props => {
   /*
     * Кнопка может играть несколько ролей.

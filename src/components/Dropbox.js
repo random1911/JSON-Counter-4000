@@ -1,61 +1,55 @@
-import React from 'react';
-import Button from './Button';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import Button from "./Button";
 
-class Dropbox extends React.Component {
+const MAX_FILE_SIZE = 1048576;
+const MAX_FILE_SIZE_IN_MB = (MAX_FILE_SIZE / 1024 / 1024).toFixed(0);
 
-  /*
-   * Использовалась информация:
-   * https://reactjs.org/docs/forms.html
-   * https://developer.mozilla.org/en-US/docs/Web/API/File/Using_files_from_web_applications
-   * */
+class Dropbox extends Component {
+  static propTypes = {
+    setError: PropTypes.func.isRequired,
+    setResult: PropTypes.func.isRequired,
+    clearErrors: PropTypes.func.isRequired,
+    haveErrors: PropTypes.bool
+  };
 
   state = {
     uploading: false,
     isDragOver: false
   };
-  _MAX_FILE_SIZE = 1048576;
-  MAX_FILE_SIZE_IN_MB = (this._MAX_FILE_SIZE / 1024 / 1024).toFixed(0);
-
-  /*
-  * https://reactjs.org/blog/2015/12/16/ismounted-antipattern.html
-  * Для решения проблемы
-  * Warning: Can only update a mounted or mounting component. This usually means you called setState, replaceState, or forceUpdate on an unmounted component. This is a no-op.
-  * */
   _isMounted = false;
 
-
-  onSubmit = (e) => {
+  onSubmit = e => {
     e.preventDefault();
   };
 
-  handleChange = (event) => {
+  handleChange = event => {
     this.props.clearErrors();
     this.handleFile(event.target.files);
   };
 
-  handleDragEnter = (e) => {
+  handleDragEnter = e => {
     preventDefaults(e);
     this.setState({
       isDragOver: true
-    })
+    });
   };
 
-  handleDragOver = (e) => {
+  handleDragOver = e => {
     preventDefaults(e);
   };
 
-  handleDragLeave = (e) => {
+  handleDragLeave = e => {
     preventDefaults(e);
     this.setState({
       isDragOver: false
-    })
+    });
   };
 
-  handleDrop = (e) => {
+  handleDrop = e => {
     preventDefaults(e);
-    if(!this.state.uploading){
-      const
-        dt = e.dataTransfer,
+    if (!this.state.uploading) {
+      const dt = e.dataTransfer,
         files = dt.files;
       this.handleFile(files);
       this.setState({
@@ -64,62 +58,54 @@ class Dropbox extends React.Component {
     }
   };
 
-  handleFile = (files) => {
+  handleFile = files => {
+    const checkFile = (file, index) => {
+      const { name, size } = file;
+      const extensionError = `"${name}" don't have .json or .txt format.`;
+      const sizeError = `"${name}" is grater than ${MAX_FILE_SIZE_IN_MB}mb`;
+      const parseError = `uploaded file "${name}" can't be parsed as JSON`;
+      const uploadError = `can't upload "${name}"`;
 
-    const checkFile = (file) => {
-
-      const
-        MAX_FILE_SIZE = this._MAX_FILE_SIZE,
-        extensionError = `"${file.name}" don't have .json or .txt format.`,
-        sizeError = `"${file.name}" is grater than ${this.MAX_FILE_SIZE_IN_MB}mb`,
-        parseError = `uploaded file "${file.name}" can't be parsed as JSON`,
-        uploadError = `can't upload "${file.name}"`;
-
-      const handleError = (text) => {
-        const
-          err = {
-            text,
-            key: `${file.name}_${Date.now()}`
-          };
+      const handleError = text => {
+        const err = {
+          text,
+          key: `${name}_${index}`
+        };
         this.props.setError(err);
       };
 
       /*
-        * Вообще я планировал сделать проверку на Mime type и пытаться отпарсить
-        * application/json и text/plain, и был сильно удивлен, что в file.type в JSON
-        * приходит просто пустая строка. Вероятно, это какие-то неведомые мне подводные камни.
-        * Остается проверить расшрение файла, допустить .json и .txt, а потом попробовать их отпарсить
+        * well, first I planned to check Mime type
+        * but instead of application/json I've seen just empty string in real json
+        * Whats why I check just file extension
+        * .json and .txt passes as valid
         * */
 
-      const
-        // чтобы получить расширение файла беру имя файла, режу на массив по точке и беру его последний элемент
-        fileNameSpread = file.name.split('.'),
-        fileExtension = fileNameSpread[fileNameSpread.length - 1];
+      const fileNameSpread = name.split(".");
+      const fileExtension = fileNameSpread[fileNameSpread.length - 1];
 
-      //проверяем расширение
-      if (fileExtension !== 'json' && fileExtension !== 'txt') {
+      if (fileExtension !== "json" && fileExtension !== "txt") {
         handleError(extensionError);
         return;
       }
 
-      // проверяем на размер файла
-      if (file.size >= MAX_FILE_SIZE) {
+      if (size >= MAX_FILE_SIZE) {
         handleError(sizeError);
         return;
       }
 
       const reader = new FileReader();
-      reader.onloadstart = (event) => {
-        if(this._isMounted){
-          this.setState({uploading: true});
+      reader.onloadstart = () => {
+        if (this._isMounted) {
+          this.setState({ uploading: true });
         }
       };
-      reader.onloadend = (event) => {
-        if(this._isMounted){
-          this.setState({uploading: false});
+      reader.onloadend = event => {
+        if (this._isMounted) {
+          this.setState({ uploading: false });
         }
         let parseResult = false;
-        // проверяем, парсится ли полученный объект как JSON
+        // check if JSON is valid
         try {
           parseResult = JSON.parse(event.target.result);
         } catch (error) {
@@ -128,24 +114,20 @@ class Dropbox extends React.Component {
         }
         if (parseResult) {
           const newResult = {
-            name: file.name,
+            name,
             body: parseResult
           };
 
           this.props.setResult(newResult);
         }
-
       };
-      reader.onerror = (event) => {
+      reader.onerror = () => {
         handleError(uploadError);
       };
 
       reader.readAsText(file);
     };
-    for (let i=0; i<files.length; i++) {
-      checkFile(files[i]);
-    }
-
+    Array.from(files).map(checkFile);
   };
 
   componentDidMount() {
@@ -156,49 +138,45 @@ class Dropbox extends React.Component {
     this._isMounted = false;
   }
 
-  render(){
-
-    let
-      overlay = null,
-      modifier = '';
-    if(this.state.uploading){
-      overlay = <div className="drop-box__overlay">Loading...</div>
+  render() {
+    let overlay = null,
+      modifier = "";
+    if (this.state.uploading) {
+      overlay = <div className="drop-box__overlay">Loading...</div>;
     }
-    if(this.state.isDragOver && !this.state.uploading){
-      modifier = 'drop-box_drag-over';
+    if (this.state.isDragOver && !this.state.uploading) {
+      modifier = "drop-box_drag-over";
     }
-    if(this.props.errors.length){
-      modifier = 'drop-box_error';
+    if (this.props.haveErrors) {
+      modifier = "drop-box_error";
     }
 
     return (
-      <form onSubmit={this.onSubmit}
-            onDragEnter={this.handleDragEnter}
-            onDragOver={this.handleDragOver}
-            onDragLeave={this.handleDragLeave}
-            onDrop={this.handleDrop}
-            className={"drop-box " + modifier}>
+      <form
+        onSubmit={this.onSubmit}
+        onDragEnter={this.handleDragEnter}
+        onDragOver={this.handleDragOver}
+        onDragLeave={this.handleDragLeave}
+        onDrop={this.handleDrop}
+        className={"drop-box " + modifier}
+      >
         {overlay}
         <input
           tabIndex="0"
-          ref={(file) => this.file = file}
+          ref={file => (this.file = file)}
           onChange={this.handleChange}
           type="file"
           id="file"
           multiple
           className="drop-box__input"
         />
-        <Button
-          type="label"
-          inputId="file"
-          text="Choose a file"
-        />
+        <Button type="label" inputId="file" text="Choose a file" />
         <p className="drop-box__description">
-          File have to be JSON in .json/.txt format and less than {this.MAX_FILE_SIZE_IN_MB}mb
+          File have to be JSON in .json/.txt format and less than{" "}
+          {this.MAX_FILE_SIZE_IN_MB}mb
         </p>
-
       </form>
-    )
+    );
   }
 }
 
