@@ -20,8 +20,8 @@ const ErrorBar = (props) => {
       </ol>
       <Button
         baseClass="error-bar-reset"
-        tip="Clear errors"
-        action={props.clearErrors}
+        title="Clear errors"
+        onClick={props.clearErrors}
       />
     </div>
   )

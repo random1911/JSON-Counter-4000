@@ -1,111 +1,89 @@
-import React from 'react';
+import React from "react";
+import PropTypes from "prop-types";
 
-const Button = props => {
-  /*
-    * Кнопка может играть несколько ролей.
-    * Во-первых, она может быть просто кнопкой (button), на которую будет повешен onClick
-    * Во-вторых, она может быть ссылкой, и тогда на ней нужен url для перехода.
-    * Если проекте используется react router, вместо тега a должен быть Link
-    * В-третьих, если нужно повесить эту кнопку куда-нибудь вроде области для дропа файлов,
-    * кнопка может быть лейблом (label), с ассоциируемым с ним ID инпута, тоесть htmlFor.
-    *
-    * В зависимости от типа, будет определена оболочка, в которую будет завернута общая внутренняя часть.
-    * */
-  let template;
+// from https://github.com/random1911/universal-button
 
-  // если действие по кнопке не задано, выполняем пустую функцию, что бы не вызывать ошибок
-  const action = props.action || function () {};
-
-  // определяем имя CSS класса, или используем значение по умолчанию
-  const baseClass = props.baseClass || 'button';
-
-  // вернет строку с модификаторами
-  function getModifiers(modifier) {
-    if(modifier){
-      let modifiers;
-      if(typeof modifier === 'string'){
-        modifiers = modifier.split(',')
-      }else if(Array.isArray(modifier)){
-        modifiers = [...modifier]
-      }
-      let result = [];
-      for(let i=0; i < modifiers.length; i++){
-        result.push(baseClass + '_' + modifiers[i].trim());
-      }
-      return ` ${result.join(' ')}`;
-    }else{
-      return '';
+const Button = ({
+  type,
+  onClick,
+  url,
+  inputId,
+  baseClass,
+  modifier,
+  text,
+  icon,
+  postIcon,
+  disabled,
+  title
+}) => {
+  const getCSSModifiers = modifier => {
+    if (!modifier) return "";
+    let modifiers;
+    if (typeof modifier === "string") {
+      modifiers = modifier.split(",");
+    } else if (Array.isArray(modifier)) {
+      modifiers = [...modifier];
     }
-  }
-
-  // определяем финальный набор классов на корневом элементе
-  const combinedClass = `${baseClass}${getModifiers(props.modifier)}`;
-
-  const renderIcon = (name) => {
-    const iconClass = `${baseClass}__icon`;
-    return (
-      <span className={`${iconClass} ${iconClass}_${name}`} />
-    )
+    if (!modifiers || !modifiers.length) return "";
+    const result = modifiers.map(name => `${baseClass}_${name.trim()}`);
+    return ` ${result.join(" ")}`;
   };
 
-  // создаем шаблон содержимого
+  const combinedClass = `${baseClass}${getCSSModifiers(modifier)}`;
+
+  const renderIcon = name => {
+    const iconClass = `${baseClass}__icon`;
+    return <span className={`${iconClass} ${iconClass}_${name}`} />;
+  };
+
   const inner = (
     <span className={`${baseClass}__inner`}>
-      {/* если есть иконка вначале, выводим её */}
-      { props.icon && (
-        renderIcon(props.icon)
-      ) }
-      {/* если есть текст, выводим его */}
-      { props.text && (
-        <span className={`${baseClass}__text`}>{props.text}</span>
-      )}
-      {/*
-        иконку в конце показываем только если есть текст, если нужна кнопка из одной иконки,
-        нужно использовать icon. Кнопка из двух иконок без текста - это было бы странно
-        */}
-      {
-        props.text && props.postIcon && (
-          renderIcon(props.postIcon)
-        )
-      }
-      </span>
+      {icon && renderIcon(icon)}
+      {text && <span className={`${baseClass}__text`}>{text}</span>}
+      {text && postIcon && renderIcon(postIcon)}
+    </span>
   );
 
-  // выбираем обертку в зависимости от типа
-  switch (props.type) {
-    case 'link':
-      template = (
-        <a className={combinedClass}
-           title={props.tip}
-           href={props.url}>
+  switch (type) {
+    case "link":
+      return (
+        <a title={title} className={combinedClass} href={url}>
           {inner}
         </a>
       );
-      break;
-    case 'label':
-      template = (
-        <label className={combinedClass}
-               title={props.tip}
-               htmlFor={props.inputId}>
+    case "label":
+      return (
+        <label title={title} className={combinedClass} htmlFor={inputId}>
           {inner}
         </label>
       );
-      break;
     default: {
-      template = (
-        <button
-          className={combinedClass}
-          title={props.tip}
-          disabled={props.disabled}
-          onClick={() => action(props.arguments)}
-        >
+      return (
+        <button title={title} className={combinedClass} disabled={disabled} onClick={onClick}>
           {inner}
         </button>
-      )
+      );
     }
   }
+};
 
-  return template;
+Button.propTypes = {
+  type: PropTypes.oneOf(["button", "link", "label"]),
+  onClick: PropTypes.func,
+  url: PropTypes.string,
+  inputId: PropTypes.string,
+  baseClass: PropTypes.string,
+  modifier: PropTypes.any,
+  text: PropTypes.string,
+  icon: PropTypes.string,
+  postIcon: PropTypes.string,
+  title: PropTypes.string,
+  disabled: PropTypes.bool
+};
+Button.defaultProps = {
+  baseClass: "button",
+  onClick: () => {},
+  type: "button"
 };
 
 export default Button;
