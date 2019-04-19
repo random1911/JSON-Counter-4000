@@ -2,22 +2,26 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import Button from "./Button";
 
-const MAX_FILE_SIZE = 1048576;
-const MAX_FILE_SIZE_IN_MB = (MAX_FILE_SIZE / 1024 / 1024).toFixed(0);
-
 class Dropbox extends Component {
   static propTypes = {
     setError: PropTypes.func.isRequired,
     setResult: PropTypes.func.isRequired,
     clearErrors: PropTypes.func.isRequired,
-    haveErrors: PropTypes.bool
+    haveErrors: PropTypes.bool,
+    maxFileSize: PropTypes.number
   };
-
-  state = {
-    uploading: false,
-    isDragOver: false
+  static defaultProps = {
+    maxFileSize: 1048576
   };
-  _isMounted = false;
+  constructor(props) {
+    super(props);
+    this.state = {
+      uploading: false,
+      isDragOver: false
+    };
+    this._isMounted = false;
+    this.maxFileSizeInMb = (props.maxFileSize / 1024 / 1024).toFixed(0);
+  }
 
   onSubmit = e => {
     e.preventDefault();
@@ -48,21 +52,21 @@ class Dropbox extends Component {
 
   handleDrop = e => {
     preventDefaults(e);
-    if (!this.state.uploading) {
-      const dt = e.dataTransfer,
-        files = dt.files;
-      this.handleFile(files);
-      this.setState({
-        isDragOver: false
-      });
-    }
+    this.setState({
+      isDragOver: false
+    });
+    if (this.state.uploading) return;
+    this.props.clearErrors();
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    this.handleFile(files);
   };
 
   handleFile = files => {
     const checkFile = (file, index) => {
       const { name, size } = file;
       const extensionError = `"${name}" don't have .json or .txt format.`;
-      const sizeError = `"${name}" is grater than ${MAX_FILE_SIZE_IN_MB}mb`;
+      const sizeError = `"${name}" is grater than ${this.maxFileSizeInMb}mb`;
       const parseError = `uploaded file "${name}" can't be parsed as JSON`;
       const uploadError = `can't upload "${name}"`;
 
@@ -75,21 +79,21 @@ class Dropbox extends Component {
       };
 
       /*
-        * well, first I planned to check Mime type
+        * First I planned to check Mime type
         * but instead of application/json I've seen just empty string in real json
         * Whats why I check just file extension
         * .json and .txt passes as valid
         * */
 
-      const fileNameSpread = name.split(".");
-      const fileExtension = fileNameSpread[fileNameSpread.length - 1];
+      const fileNameSplitted = name.split(".");
+      const fileExtension = fileNameSplitted[fileNameSplitted.length - 1];
 
       if (fileExtension !== "json" && fileExtension !== "txt") {
         handleError(extensionError);
         return;
       }
 
-      if (size >= MAX_FILE_SIZE) {
+      if (size >= this.props.maxFileSize) {
         handleError(sizeError);
         return;
       }
@@ -139,17 +143,18 @@ class Dropbox extends Component {
   }
 
   render() {
-    let overlay = null,
-      modifier = "";
-    if (this.state.uploading) {
-      overlay = <div className="drop-box__overlay">Loading...</div>;
-    }
-    if (this.state.isDragOver && !this.state.uploading) {
-      modifier = "drop-box_drag-over";
-    }
-    if (this.props.haveErrors) {
-      modifier = "drop-box_error";
-    }
+    const { uploading, isDragOver } = this.state;
+    const { haveErrors } = this.props;
+    const getModifier = () => {
+      const base = " drop-box_";
+      if (isDragOver && !uploading) {
+        return `${base}drag-over`;
+      }
+      if (haveErrors) {
+        return `${base}error`;
+      }
+      return "";
+    };
 
     return (
       <form
@@ -158,12 +163,11 @@ class Dropbox extends Component {
         onDragOver={this.handleDragOver}
         onDragLeave={this.handleDragLeave}
         onDrop={this.handleDrop}
-        className={"drop-box " + modifier}
+        className={`drop-box${getModifier()}`}
       >
-        {overlay}
+        {uploading && <div className="drop-box__overlay">Loading...</div>}
         <input
           tabIndex="0"
-          ref={file => (this.file = file)}
           onChange={this.handleChange}
           type="file"
           id="file"
@@ -173,7 +177,7 @@ class Dropbox extends Component {
         <Button type="label" inputId="file" text="Choose a file" />
         <p className="drop-box__description">
           File have to be JSON in .json/.txt format and less than{" "}
-          {this.MAX_FILE_SIZE_IN_MB}mb
+          {this.maxFileSizeInMb}mb
         </p>
       </form>
     );
