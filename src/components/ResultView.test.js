@@ -4,16 +4,17 @@ import ResultView from './ResultView';
 
 describe('<ResultView />', () => {
   const fakeResult = [
-    {name: 1, body: [{}, {}, []]},
-    {name: 2, body: [{}, {}, [{}, {a: []}]]}
+    {name: '1', body: [{}, {}, []]},
+    {name: '2', body: [{}, {}, [{}, {a: []}]]}
   ];
+  const emptyFunc = () => {};
 
   it('Have same list items as result array length', ()=> {
-    const result = shallow( <ResultView content={fakeResult} />);
+    const result = shallow( <ResultView content={fakeResult} resetResult={emptyFunc} />);
     expect(result.find('.result-view-item').length).toEqual(fakeResult.length);
   });
   it('Showing count result', () => {
-    const result = shallow( <ResultView content={fakeResult} />);
+    const result = shallow( <ResultView content={fakeResult} resetResult={emptyFunc} />);
     expect(result.find('.result-view-item').at(0).find('.result-view-item__count').text()).toEqual('3');
     expect(result.find('.result-view-item').at(1).find('.result-view-item__count').text()).toEqual('6');
   });
