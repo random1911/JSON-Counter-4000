@@ -59,7 +59,12 @@ const Button = ({
       );
     default: {
       return (
-        <button title={title} className={combinedClass} disabled={disabled} onClick={onClick}>
+        <button
+          title={title}
+          className={combinedClass}
+          disabled={disabled}
+          onClick={onClick}
+        >
           {inner}
         </button>
       );
