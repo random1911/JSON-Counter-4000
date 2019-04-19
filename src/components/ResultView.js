@@ -1,38 +1,50 @@
-import React from "react";
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 import Button from "./Button";
 
-class ResultView extends React.Component {
+class ResultView extends Component {
+  static propTypes = {
+    resetResult: PropTypes.func.isRequired,
+    content: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string,
+        body: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
+      })
+    )
+  };
   getCountResult = json => {
-    let counter = 0,
-      keys = [];
-    function registerObject(key) {
-      counter++;
-      // записываю ключи/индексы, по которым найдены объекты
-      keys = keys.concat([key]);
-    }
+    let counter = 0;
+    let keys = [];
+    const registerObject = key => {
+      counter += 1;
+      // register keys/indexes where objects was found
+      keys = [...keys, key];
+    };
 
-    function countObject(target) {
-      // for in может обойти как объект, как и массив, поэтому я выбрал его.
-      for (let key in target) {
-        if (typeof target[key] === "object" && target[key] !== null) {
+    // recursive function for counting arrays and objects
+    const countObject = target => {
+      const keys = Object.keys(target);
+      keys.forEach(key => {
+        const current = target[key];
+        if (typeof current === "object" && current !== null) {
           registerObject(key);
-          countObject(target[key]);
+          countObject(current);
         }
-      }
-    }
+      });
+    };
     countObject(json);
     return { counter, keys };
   };
 
-  renderResultItem = item => {
-    const countResult = this.getCountResult(item.body),
-      keys = countResult.keys.join("\n");
+  renderResultItem = ({ name, body }) => {
+    const countResult = this.getCountResult(body);
+    const keys = countResult.keys.join("\n");
     return (
-      <li key={item.name} className="result-view-item">
+      <li key={name} className="result-view-item">
         <div className="result-view-item__summary">
           <div className="result-view-item__summary-row">
             <span className="result-view-item__label">File name:</span>
-            <span className="result-view-item__name">{item.name}</span>
+            <span className="result-view-item__name">{name}</span>
           </div>
           <div className="result-view-item__summary-row">
             <span className="result-view-item__label">Objects count:</span>
@@ -54,14 +66,15 @@ class ResultView extends React.Component {
   };
 
   render() {
+    const { content, resetResult } = this.props;
     return (
       <div className="result-view">
         <h2 className="result-view-caption">Here is a counting result:</h2>
         <ul className="result-view-list">
-          {this.props.content.map(this.renderResultItem)}
+          {content.map(this.renderResultItem)}
         </ul>
         <div className="result-view-footer">
-          <Button text="Count something else" onClick={this.props.resetResult} />
+          <Button text="Count something else" onClick={resetResult} />
         </div>
       </div>
     );
