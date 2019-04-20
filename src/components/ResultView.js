@@ -17,7 +17,7 @@ class ResultView extends Component {
     let keys = [];
     const registerObject = key => {
       counter += 1;
-      // register keys/indexes where objects was found
+      // register keys/indexes where objects were found
       keys = [...keys, key];
     };
 
