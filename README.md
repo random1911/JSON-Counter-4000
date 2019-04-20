@@ -1,4 +1,4 @@
-#About this repo
+# About this repo
 
 Originally it was trial task from team I wanted to join during I worked for Peter-Service/Nexign and my first ever React app.
 Before they give me an answer I've got some offers from outside, so now I keep it as my public code example.
