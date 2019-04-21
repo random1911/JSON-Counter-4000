@@ -1,17 +1,22 @@
-import React, { Component } from "react";
+import React, { Component, DragEvent } from "react";
 import Header from "./Header";
-import ErrorBar from "./ErrorBar";
+import ErrorBar, { IError } from "./ErrorBar";
 import Dropbox from "./Dropbox";
-import ResultView from "./ResultView";
+import ResultView, { IJsonFile } from "./ResultView";
 
-class App extends Component {
+interface IState {
+  errors: IError[];
+  files: IJsonFile[];
+}
+
+class App extends Component<{}, IState> {
   state = {
     errors: [],
-    result: []
+    files: []
   };
 
   // set errors for error bar
-  setError = error => {
+  setError = (error: IError) => {
     this.setState(prevState => {
       const errors = [...prevState.errors, error];
       return { errors };
@@ -26,10 +31,10 @@ class App extends Component {
   };
 
   // set valid json files to count
-  setResult = newResult => {
+  setFiles = (newFile: IJsonFile) => {
     this.setState(prevState => {
-      const result = [...prevState.result, newResult];
-      return { result };
+      const files = [...prevState.files, newFile];
+      return { files };
     });
   };
 
@@ -37,21 +42,21 @@ class App extends Component {
   resetResult = () => {
     this.setState({
       errors: [],
-      result: []
+      files: []
     });
   };
 
   // handler for drag on result view
-  dragHandler = e => {
+  dragHandler = (e: DragEvent) => {
     e.stopPropagation();
     e.preventDefault();
     this.resetResult();
   };
 
   render() {
-    const { errors, result } = this.state;
-    const haveErrors = !!errors.length;
-    const haveResult = !!result.length;
+    const { errors, files } = this.state;
+    const haveErrors: boolean = !!errors.length;
+    const haveResult: boolean = !!files.length;
 
     return (
       <div className="app-wrapper" onDragEnter={this.dragHandler}>
@@ -63,12 +68,12 @@ class App extends Component {
           {!haveResult ? (
             <Dropbox
               setError={this.setError}
-              setResult={this.setResult}
+              setResult={this.setFiles}
               haveErrors={haveErrors}
               clearErrors={this.clearErrors}
             />
           ) : (
-            <ResultView content={result} resetResult={this.resetResult} />
+            <ResultView content={files} resetResult={this.resetResult} />
           )}
         </div>
       </div>

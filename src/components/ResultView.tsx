@@ -1,33 +1,34 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React, { FC } from "react";
 import Button from "./Button";
 
-class ResultView extends Component {
-  static propTypes = {
-    resetResult: PropTypes.func.isRequired,
-    content: PropTypes.arrayOf(
-      PropTypes.shape({
-        name: PropTypes.string,
-        body: PropTypes.oneOfType([PropTypes.object, PropTypes.array])
-      })
-    )
-  };
-  getCountResult = json => {
-    let counter = 0;
-    let keys = [];
-    const registerObject = key => {
+export interface IJsonFile {
+  name: string;
+  body: any;
+}
+
+interface IProps {
+  content: IJsonFile[];
+  resetResult: () => void;
+}
+
+const ResultView: FC<IProps> = ({ content, resetResult }) => {
+  console.log('content', content)
+  const getCountResult = (json: any) => {
+    let counter: number = 0;
+    let keys: string[] = [];
+    const registerObject = (key: string) => {
       counter += 1;
       // register keys/indexes where objects were found
       keys = [...keys, key];
     };
 
     // recursive function for counting arrays and objects
-    const countObject = target => {
+    const countObject = (target: any) => {
       const keys = Object.keys(target);
       keys.forEach(key => {
         const current = target[key];
         if (typeof current === "object" && current !== null) {
-          registerObject(key);
+          registerObject(key.toString());
           countObject(current);
         }
       });
@@ -36,8 +37,8 @@ class ResultView extends Component {
     return { counter, keys };
   };
 
-  renderResultItem = ({ name, body }) => {
-    const countResult = this.getCountResult(body);
+  const renderResultItem = ({ name, body }: IJsonFile) => {
+    const countResult = getCountResult(body);
     const keys = countResult.keys.join("\n");
     return (
       <li key={name} className="result-view-item">
@@ -65,20 +66,15 @@ class ResultView extends Component {
     );
   };
 
-  render() {
-    const { content, resetResult } = this.props;
-    return (
-      <div className="result-view">
-        <h2 className="result-view-caption">Here is a counting result:</h2>
-        <ul className="result-view-list">
-          {content.map(this.renderResultItem)}
-        </ul>
-        <div className="result-view-footer">
-          <Button text="Count something else" onClick={resetResult} />
-        </div>
+  return (
+    <div className="result-view">
+      <h2 className="result-view-caption">Here is a counting result:</h2>
+      <ul className="result-view-list">{content.map(renderResultItem)}</ul>
+      <div className="result-view-footer">
+        <Button text="Count something else" onClick={resetResult} />
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default ResultView;
