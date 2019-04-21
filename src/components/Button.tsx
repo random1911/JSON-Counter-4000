@@ -1,14 +1,27 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, {FC} from "react";
 
 // from https://github.com/random1911/universal-button
 
-const Button = ({
-  type,
-  onClick,
+interface IProps {
+  type?: "button" | "link" | "label";
+  onClick: () => void;
+  url?: string;
+  inputId?: string;
+  baseClass?: string;
+  modifier?: string | string[];
+  text?: string;
+  icon?: string;
+  postIcon?: string;
+  title?: string;
+  disabled?: boolean;
+}
+
+const Button: FC<IProps> = ({
+  type = 'button',
+  onClick = () => {},
   url,
   inputId,
-  baseClass,
+  baseClass = 'button',
   modifier,
   text,
   icon,
@@ -16,7 +29,7 @@ const Button = ({
   disabled,
   title
 }) => {
-  const getCSSModifiers = modifier => {
+  const getCSSModifiers = (modifier: undefined | string | string[]) => {
     if (!modifier) return "";
     let modifiers;
     if (typeof modifier === "string") {
@@ -31,7 +44,7 @@ const Button = ({
 
   const combinedClass = `${baseClass}${getCSSModifiers(modifier)}`;
 
-  const renderIcon = name => {
+  const renderIcon = (name: string) => {
     const iconClass = `${baseClass}__icon`;
     return <span className={`${iconClass} ${iconClass}_${name}`} />;
   };
@@ -61,6 +74,7 @@ const Button = ({
       return (
         <button
           title={title}
+          type={type}
           className={combinedClass}
           disabled={disabled}
           onClick={onClick}
@@ -70,25 +84,6 @@ const Button = ({
       );
     }
   }
-};
-
-Button.propTypes = {
-  type: PropTypes.oneOf(["button", "link", "label"]),
-  onClick: PropTypes.func,
-  url: PropTypes.string,
-  inputId: PropTypes.string,
-  baseClass: PropTypes.string,
-  modifier: PropTypes.any,
-  text: PropTypes.string,
-  icon: PropTypes.string,
-  postIcon: PropTypes.string,
-  title: PropTypes.string,
-  disabled: PropTypes.bool
-};
-Button.defaultProps = {
-  baseClass: "button",
-  onClick: () => {},
-  type: "button"
 };
 
 export default Button;
