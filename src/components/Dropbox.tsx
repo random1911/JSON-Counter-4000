@@ -17,7 +17,7 @@ interface IState {
 }
 
 interface InputFile extends FormEvent {
-  target: HTMLInputElement & EventTarget
+  target: HTMLInputElement & EventTarget;
 }
 
 class Dropbox extends Component<IProps, IState> {
@@ -77,7 +77,7 @@ class Dropbox extends Component<IProps, IState> {
   };
 
   handleFile = (files: FileList | null) => {
-    if (!files) return
+    if (!files) return;
     const { setError, maxFileSize } = this.props;
     const checkFile = (currentFile: File, index: number) => {
       const { name, size } = currentFile;
@@ -122,14 +122,17 @@ class Dropbox extends Component<IProps, IState> {
           this.setState({ uploading: true });
         }
       };
-      reader.onloadend = (event: Event & { target: { result: string } }) => {
-        // if (this._isMounted) {
-        this.setState({ uploading: false });
-        // }
+      reader.onloadend = () => {
+        if (this._isMounted) {
+          this.setState({ uploading: false });
+        }
         let parseResult = false;
         // check if JSON is valid
         try {
-          parseResult = JSON.parse(event.target.result);
+          const { result } = reader;
+          if (result) {
+            parseResult = JSON.parse(result.toString());
+          }
         } catch (error) {
           handleError(parseError);
           return;
