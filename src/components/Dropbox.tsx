@@ -1,56 +1,70 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React, { Component, FormEvent, DragEvent, ChangeEvent } from "react";
 import Button from "./Button";
+import { IError } from "./ErrorBar";
+import { IJsonFile } from "./ResultView";
 
-class Dropbox extends Component {
-  static propTypes = {
-    setError: PropTypes.func.isRequired,
-    setResult: PropTypes.func.isRequired,
-    clearErrors: PropTypes.func.isRequired,
-    haveErrors: PropTypes.bool,
-    maxFileSize: PropTypes.number
-  };
-  static defaultProps = {
+interface IProps {
+  setError: (error: IError) => void;
+  setResult: (newFile: IJsonFile) => void;
+  clearErrors: () => void;
+  haveErrors: boolean;
+  maxFileSize: number;
+}
+interface IState {
+  uploading: boolean;
+  isDragOver: boolean;
+  maxFileSizeInMb: string;
+}
+
+interface InputFile extends FormEvent {
+  target: HTMLInputElement & EventTarget
+}
+
+class Dropbox extends Component<IProps, IState> {
+  static defaultProps: Partial<IProps> = {
     maxFileSize: 1048576
   };
-  constructor(props) {
+  constructor(props: IProps) {
     super(props);
     this.state = {
       uploading: false,
-      isDragOver: false
+      isDragOver: false,
+      maxFileSizeInMb: props.maxFileSize
+        ? (props.maxFileSize / 1024 / 1024).toFixed(0)
+        : "0"
     };
     this._isMounted = false;
-    this.maxFileSizeInMb = (props.maxFileSize / 1024 / 1024).toFixed(0);
   }
+  _isMounted: boolean;
 
-  onSubmit = e => {
+  onSubmit = (e: FormEvent) => {
     e.preventDefault();
   };
 
-  handleChange = event => {
+  handleChange = (e: InputFile) => {
     this.props.clearErrors();
-    this.handleFile(event.target.files);
+    this.handleFile(e.target.files);
   };
 
-  handleDragEnter = e => {
+  handleDragEnter = (e: DragEvent) => {
     preventDefaults(e);
     this.setState({
       isDragOver: true
     });
   };
 
-  handleDragOver = e => {
+  handleDragOver = (e: DragEvent) => {
     preventDefaults(e);
   };
 
-  handleDragLeave = e => {
+  handleDragLeave = (e: DragEvent) => {
     preventDefaults(e);
     this.setState({
       isDragOver: false
     });
   };
 
-  handleDrop = e => {
+  handleDrop = (e: DragEvent) => {
     preventDefaults(e);
     this.setState({
       isDragOver: false
@@ -62,20 +76,24 @@ class Dropbox extends Component {
     this.handleFile(files);
   };
 
-  handleFile = files => {
-    const checkFile = (file, index) => {
-      const { name, size } = file;
+  handleFile = (files: FileList | null) => {
+    if (!files) return
+    const { setError, maxFileSize } = this.props;
+    const checkFile = (currentFile: File, index: number) => {
+      const { name, size } = currentFile;
       const extensionError = `"${name}" don't have .json or .txt format.`;
-      const sizeError = `"${name}" is grater than ${this.maxFileSizeInMb}mb`;
+      const sizeError = `"${name}" is grater than ${
+        this.state.maxFileSizeInMb
+      }mb`;
       const parseError = `uploaded file "${name}" can't be parsed as JSON`;
       const uploadError = `can't upload "${name}"`;
 
-      const handleError = text => {
+      const handleError = (text: string) => {
         const err = {
           text,
           key: `${name}_${index}`
         };
-        this.props.setError(err);
+        setError(err);
       };
 
       /*
@@ -93,7 +111,7 @@ class Dropbox extends Component {
         return;
       }
 
-      if (size >= this.props.maxFileSize) {
+      if (size >= maxFileSize) {
         handleError(sizeError);
         return;
       }
@@ -104,10 +122,10 @@ class Dropbox extends Component {
           this.setState({ uploading: true });
         }
       };
-      reader.onloadend = event => {
-        if (this._isMounted) {
-          this.setState({ uploading: false });
-        }
+      reader.onloadend = (event: Event & { target: { result: string } }) => {
+        // if (this._isMounted) {
+        this.setState({ uploading: false });
+        // }
         let parseResult = false;
         // check if JSON is valid
         try {
@@ -129,7 +147,7 @@ class Dropbox extends Component {
         handleError(uploadError);
       };
 
-      reader.readAsText(file);
+      reader.readAsText(currentFile);
     };
     Array.from(files).map(checkFile);
   };
@@ -167,7 +185,7 @@ class Dropbox extends Component {
       >
         {uploading && <div className="drop-box__overlay">Loading...</div>}
         <input
-          tabIndex="0"
+          tabIndex={0}
           onChange={this.handleChange}
           type="file"
           id="file"
@@ -177,14 +195,14 @@ class Dropbox extends Component {
         <Button type="label" inputId="file" text="Choose a file" />
         <p className="drop-box__description">
           File have to be JSON in .json/.txt format and less than{" "}
-          {this.maxFileSizeInMb}mb
+          {this.state.maxFileSizeInMb}mb
         </p>
       </form>
     );
   }
 }
 
-function preventDefaults(e) {
+function preventDefaults(e: DragEvent) {
   e.stopPropagation();
   e.preventDefault();
 }

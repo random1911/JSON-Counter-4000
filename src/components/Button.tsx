@@ -4,7 +4,7 @@ import React, {FC} from "react";
 
 interface IProps {
   type?: "button" | "link" | "label";
-  onClick: () => void;
+  onClick?: () => void;
   url?: string;
   inputId?: string;
   baseClass?: string;
