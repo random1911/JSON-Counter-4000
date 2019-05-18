@@ -11,8 +11,6 @@
     margin: 0;
     position: relative;
     z-index: 1;
-    //max-height: 30vh;
-    //overflow-y: auto;
   }
   &__item {
     list-style-position: inside;
@@ -30,7 +28,7 @@
   z-index: 1;
   background: transparent;
   padding: 0;
-  border:none;
+  border: none;
   &:focus {
     outline: none;
   }
@@ -40,9 +38,10 @@
     .wh(28px);
     border: 2px solid transparent;
     border-radius: 50%;
-    transition: all .2s ease;
-    &::before, &::after {
-      content:"";
+    transition: all 0.2s ease;
+    &::before,
+    &::after {
+      content: "";
       position: absolute;
       z-index: 1;
       height: 4px;
@@ -65,7 +64,6 @@
     background: #fff;
   }
 }
-
 
 @media screen and (min-width: @wideSize) {
   .error-bar {
