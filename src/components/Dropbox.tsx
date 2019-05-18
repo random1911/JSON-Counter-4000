@@ -1,4 +1,4 @@
-import React, { Component, FormEvent, DragEvent, ChangeEvent } from "react";
+import React, { FC, FormEvent, DragEvent, useState } from "react";
 import Button from "./Button";
 import { IError } from "./ErrorBar";
 import { IJsonFile } from "./ResultView";
@@ -8,7 +8,7 @@ interface IProps {
   setResult: (newFile: IJsonFile) => void;
   clearErrors: () => void;
   haveErrors: boolean;
-  maxFileSize: number;
+  maxFileSize?: number;
 }
 interface IState {
   uploading: boolean;
@@ -20,71 +20,30 @@ interface InputFile extends FormEvent {
   target: HTMLInputElement & EventTarget;
 }
 
-class Dropbox extends Component<IProps, IState> {
-  static defaultProps: Partial<IProps> = {
-    maxFileSize: 1048576
-  };
-  constructor(props: IProps) {
-    super(props);
-    this.state = {
-      uploading: false,
-      isDragOver: false,
-      maxFileSizeInMb: props.maxFileSize
-        ? (props.maxFileSize / 1024 / 1024).toFixed(0)
-        : "0"
-    };
-    this._isMounted = false;
-  }
-  _isMounted: boolean;
+const Dropbox: FC<IProps> = ({
+  setError,
+  setResult,
+  maxFileSize = 1048576,
+  haveErrors,
+  clearErrors
+}) => {
+  const maxFileSizeInMb: string = (maxFileSize / 1024 / 1024).toFixed(0);
+  const [isUploading, setUploading] = useState(false);
+  const [isDragOver, setDragOver] = useState(false);
 
-  onSubmit = (e: FormEvent) => {
+  const preventDefaults = (e: DragEvent) => {
+    e.stopPropagation();
     e.preventDefault();
   };
-
-  handleChange = (e: InputFile) => {
-    this.props.clearErrors();
-    this.handleFile(e.target.files);
+  const onSubmit = (e: FormEvent) => {
+    e.preventDefault();
   };
-
-  handleDragEnter = (e: DragEvent) => {
-    preventDefaults(e);
-    this.setState({
-      isDragOver: true
-    });
-  };
-
-  handleDragOver = (e: DragEvent) => {
-    preventDefaults(e);
-  };
-
-  handleDragLeave = (e: DragEvent) => {
-    preventDefaults(e);
-    this.setState({
-      isDragOver: false
-    });
-  };
-
-  handleDrop = (e: DragEvent) => {
-    preventDefaults(e);
-    this.setState({
-      isDragOver: false
-    });
-    if (this.state.uploading) return;
-    this.props.clearErrors();
-    const dt = e.dataTransfer;
-    const files = dt.files;
-    this.handleFile(files);
-  };
-
-  handleFile = (files: FileList | null) => {
+  const handleFile = (files: FileList | null) => {
     if (!files) return;
-    const { setError, maxFileSize } = this.props;
     const checkFile = (currentFile: File, index: number) => {
       const { name, size } = currentFile;
       const extensionError = `"${name}" don't have .json or .txt format.`;
-      const sizeError = `"${name}" is grater than ${
-        this.state.maxFileSizeInMb
-      }mb`;
+      const sizeError = `"${name}" is grater than ${maxFileSizeInMb}mb`;
       const parseError = `uploaded file "${name}" can't be parsed as JSON`;
       const uploadError = `can't upload "${name}"`;
 
@@ -118,14 +77,10 @@ class Dropbox extends Component<IProps, IState> {
 
       const reader = new FileReader();
       reader.onloadstart = () => {
-        if (this._isMounted) {
-          this.setState({ uploading: true });
-        }
+        setUploading(true);
       };
       reader.onloadend = () => {
-        if (this._isMounted) {
-          this.setState({ uploading: false });
-        }
+        setUploading(false);
         let parseResult = false;
         // check if JSON is valid
         try {
@@ -142,8 +97,7 @@ class Dropbox extends Component<IProps, IState> {
             name,
             body: parseResult
           };
-
-          this.props.setResult(newResult);
+          setResult(newResult);
         }
       };
       reader.onerror = () => {
@@ -154,60 +108,67 @@ class Dropbox extends Component<IProps, IState> {
     };
     Array.from(files).map(checkFile);
   };
+  const handleChange = (e: InputFile) => {
+    clearErrors();
+    handleFile(e.target.files);
+  };
+  const handleDragEnter = (e: DragEvent) => {
+    preventDefaults(e);
+    setDragOver(true);
+  };
+  const handleDragOver = (e: DragEvent) => {
+    preventDefaults(e);
+  };
+  const handleDragLeave = (e: DragEvent) => {
+    preventDefaults(e);
+    setDragOver(false);
+  };
+  const handleDrop = (e: DragEvent) => {
+    preventDefaults(e);
+    setDragOver(false);
+    if (isUploading) return;
+    clearErrors();
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    handleFile(files);
+  };
 
-  componentDidMount() {
-    this._isMounted = true;
-  }
+  const getModifier = () => {
+    const base = " drop-box_";
+    if (isDragOver && !isUploading) {
+      return `${base}drag-over`;
+    }
+    if (haveErrors) {
+      return `${base}error`;
+    }
+    return "";
+  };
 
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
-
-  render() {
-    const { uploading, isDragOver } = this.state;
-    const { haveErrors } = this.props;
-    const getModifier = () => {
-      const base = " drop-box_";
-      if (isDragOver && !uploading) {
-        return `${base}drag-over`;
-      }
-      if (haveErrors) {
-        return `${base}error`;
-      }
-      return "";
-    };
-
-    return (
-      <form
-        onSubmit={this.onSubmit}
-        onDragEnter={this.handleDragEnter}
-        onDragOver={this.handleDragOver}
-        onDragLeave={this.handleDragLeave}
-        onDrop={this.handleDrop}
-        className={`drop-box${getModifier()}`}
-      >
-        {uploading && <div className="drop-box__overlay">Loading...</div>}
-        <input
-          tabIndex={0}
-          onChange={this.handleChange}
-          type="file"
-          id="file"
-          multiple
-          className="drop-box__input"
-        />
-        <Button type="label" inputId="file" text="Choose a file" />
-        <p className="drop-box__description">
-          File have to be JSON in .json/.txt format and less than{" "}
-          {this.state.maxFileSizeInMb}mb
-        </p>
-      </form>
-    );
-  }
-}
-
-function preventDefaults(e: DragEvent) {
-  e.stopPropagation();
-  e.preventDefault();
-}
+  return (
+    <form
+      onSubmit={onSubmit}
+      onDragEnter={handleDragEnter}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+      className={`drop-box${getModifier()}`}
+    >
+      {isUploading && <div className="drop-box__overlay">Loading...</div>}
+      <input
+        tabIndex={0}
+        onChange={handleChange}
+        type="file"
+        id="file"
+        multiple
+        className="drop-box__input"
+      />
+      <Button type="label" inputId="file" text="Choose a file" />
+      <p className="drop-box__description">
+        File have to be JSON in .json/.txt format and less than{" "}
+        {maxFileSizeInMb}mb
+      </p>
+    </form>
+  );
+};
 
 export default Dropbox;

@@ -12,7 +12,6 @@ interface IProps {
 }
 
 const ResultView: FC<IProps> = ({ content, resetResult }) => {
-  console.log('content', content)
   const getCountResult = (json: any) => {
     let counter: number = 0;
     let keys: string[] = [];
