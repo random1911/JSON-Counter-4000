@@ -1,6 +1,13 @@
 {
-  "main.css": "static/css/main.ee67c8b7.css",
-  "main.css.map": "static/css/main.ee67c8b7.css.map",
-  "main.js": "static/js/main.c62749d9.js",
-  "main.js.map": "static/js/main.c62749d9.js.map"
+  "main.css": "/JSON-Counter-4000/static/css/main.e8afd382.chunk.css",
+  "main.js": "/JSON-Counter-4000/static/js/main.cf4a4bbd.chunk.js",
+  "main.js.map": "/JSON-Counter-4000/static/js/main.cf4a4bbd.chunk.js.map",
+  "runtime~main.js": "/JSON-Counter-4000/static/js/runtime~main.7cb7e8fc.js",
+  "runtime~main.js.map": "/JSON-Counter-4000/static/js/runtime~main.7cb7e8fc.js.map",
+  "static/js/2.61ccb079.chunk.js": "/JSON-Counter-4000/static/js/2.61ccb079.chunk.js",
+  "static/js/2.61ccb079.chunk.js.map": "/JSON-Counter-4000/static/js/2.61ccb079.chunk.js.map",
+  "index.html": "/JSON-Counter-4000/index.html",
+  "precache-manifest.ca404f2eaf8dcf1d4e277e7758410a5e.js": "/JSON-Counter-4000/precache-manifest.ca404f2eaf8dcf1d4e277e7758410a5e.js",
+  "service-worker.js": "/JSON-Counter-4000/service-worker.js",
+  "static/css/main.e8afd382.chunk.css.map": "/JSON-Counter-4000/static/css/main.e8afd382.chunk.css.map"
 }
