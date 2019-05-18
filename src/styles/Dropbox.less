@@ -34,7 +34,7 @@
     .flexCenterAlignment;
     font-size: 40px;
     text-shadow: 1px 1px #fff;
-    &::before{
+    &::before {
       content: "";
       position: absolute;
       top: 0;
@@ -43,8 +43,14 @@
       width: 200%;
       z-index: -1;
       background-color: @bgColor;
-      // лоадер на скорую руку
-      background-image: repeating-linear-gradient(45deg, @green200, @green200 35px, @green50 35px, @green50 70px);
+      // simple loading animation
+      background-image: repeating-linear-gradient(
+        45deg,
+        @green200,
+        @green200 35px,
+        @green50 35px,
+        @green50 70px
+      );
       animation: backgroundMove 20s linear infinite;
     }
   }

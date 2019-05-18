@@ -2,7 +2,10 @@
 
 Originally it was trial task from team I wanted to join during I worked for Peter-Service/Nexign and my first ever React app.
 Before they give me an answer I've got some offers from outside, so now I keep it as my public code example.
-Last update: April 2019.
+
+A bit later I also rewrote app components with Typescript, just because "Look! I can use TypeScript"
+
+Last update: May 2019.
 
 ## Task description
 

@@ -1,18 +1,21 @@
 @import "variables";
 
-body, html {
-  margin:0;
+body,
+html {
+  margin: 0;
   padding: 0;
   min-height: 100%;
 }
 
 body {
   background: @bgColor;
-  font: 400 @baseSize/1.4 @fonts;
+  font: 400 @baseSize / 1.4 @fonts;
   color: @darkGray;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -21,13 +24,14 @@ body {
   position: relative;
 }
 
-.app-wrapper, .app-body {
+.app-wrapper,
+.app-body {
   display: flex;
   flex-direction: column;
 }
 
 .app-body {
-  flex:1 0;
+  flex: 1 0;
 }
 
 @import "Header";

@@ -1,9 +1,18 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { FC } from "react";
 import Button from "./Button";
 
-const ErrorBar = ({ errors, clearErrors }) => {
-  const renderError = ({ key, text }) => {
+export interface IError {
+  key: string;
+  text: string;
+}
+
+interface IProps {
+  errors: IError[];
+  clearErrors: () => void;
+}
+
+const ErrorBar: FC<IProps> = ({ errors, clearErrors }) => {
+  const renderError = ({ key, text }: IError) => {
     return (
       <li key={key} className="error-bar__item">
         <strong>Error:</strong> {text}
@@ -21,13 +30,6 @@ const ErrorBar = ({ errors, clearErrors }) => {
       />
     </div>
   );
-};
-
-ErrorBar.propTypes = {
-  errors: PropTypes.arrayOf(
-    PropTypes.shape({ text: PropTypes.string, key: PropTypes.string })
-  ).isRequired,
-  clearErrors: PropTypes.func.isRequired
 };
 
 export default ErrorBar;

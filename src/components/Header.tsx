@@ -1,6 +1,6 @@
-import React from "react";
+import React, {FC} from "react";
 
-const Header = () => {
+const Header: FC = () => {
   return (
     <header className="app-header">
       <h1 className="app-logo">JSON Counter 4000</h1>
