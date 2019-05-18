@@ -16,7 +16,7 @@ self.__precacheManifest = [
     "url": "/JSON-Counter-4000/static/css/main.e8afd382.chunk.css"
   },
   {
-    "revision": "17ac07a765f004fbbb2c2fcb83050a33",
+    "revision": "c8d689ad43f0980544a81f5276875e6e",
     "url": "/JSON-Counter-4000/index.html"
   }
 ];
