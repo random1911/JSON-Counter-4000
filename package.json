@@ -67,10 +67,13 @@
     "test": "node scripts/test.js"
   },
   "devDependencies": {
+    "@lipemat/css-mqpacker": "^8.0.1",
+    "add": "^2.0.6",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "gh-pages": "^1.1.0",
-    "less-loader": "^5.0.0"
+    "less-loader": "^5.0.0",
+    "yarn": "^1.16.0"
   },
   "eslintConfig": {
     "extends": "react-app"
