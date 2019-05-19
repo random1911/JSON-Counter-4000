@@ -1,4 +1,4 @@
-import React, { FC, FormEvent, DragEvent, useState } from "react";
+import React, { FC, FormEvent, DragEvent, useState, useEffect } from "react";
 import Button from "./Button";
 import { IError } from "./ErrorBar";
 import { IJsonFile } from "./ResultView";
@@ -28,6 +28,7 @@ const Dropbox: FC<IProps> = ({
   clearErrors
 }) => {
   const maxFileSizeInMb: string = (maxFileSize / 1024 / 1024).toFixed(0);
+  let isMounted: boolean;
   const [isUploading, setUploading] = useState(false);
   const [isDragOver, setDragOver] = useState(false);
 
@@ -46,6 +47,7 @@ const Dropbox: FC<IProps> = ({
       const sizeError = `"${name}" is grater than ${maxFileSizeInMb}mb`;
       const parseError = `uploaded file "${name}" can't be parsed as JSON`;
       const uploadError = `can't upload "${name}"`;
+      const emptyFile = `file ${name} is empty`;
 
       const handleError = (text: string) => {
         const err = {
@@ -77,16 +79,18 @@ const Dropbox: FC<IProps> = ({
 
       const reader = new FileReader();
       reader.onloadstart = () => {
-        setUploading(true);
+        isMounted && setUploading(true);
       };
       reader.onloadend = () => {
-        setUploading(false);
+        isMounted && setUploading(false);
         let parseResult = false;
         // check if JSON is valid
         try {
           const { result } = reader;
           if (result) {
             parseResult = JSON.parse(result.toString());
+          } else if (result === "") {
+            handleError(emptyFile);
           }
         } catch (error) {
           handleError(parseError);
@@ -125,13 +129,20 @@ const Dropbox: FC<IProps> = ({
   };
   const handleDrop = (e: DragEvent) => {
     preventDefaults(e);
-    setDragOver(false);
+    isMounted && setDragOver(false);
     if (isUploading) return;
     clearErrors();
     const dt = e.dataTransfer;
     const files = dt.files;
     handleFile(files);
   };
+
+  useEffect(() => {
+    isMounted = true;
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const getModifier = () => {
     const base = " drop-box_";
